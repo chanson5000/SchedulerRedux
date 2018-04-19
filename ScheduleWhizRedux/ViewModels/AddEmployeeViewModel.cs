@@ -61,10 +61,11 @@ namespace ScheduleWhizRedux.ViewModels
 
             if (DataAccess.AddEmployee(employee))
             {
+                
                 MessageBox.Show($"The employee, {AddFirstName} {AddLastName}, was added to the database.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                this.TryClose();
+                this.TryClose(true);
             }
             else
             {
