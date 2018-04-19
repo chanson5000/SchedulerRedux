@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using ScheduleWhizRedux.Helpers;
 using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    class AddEmployeeViewModel : Screen
+    public class AddEmployeeViewModel : Screen
     {
         private string _addFirstName;
         private string _addLastName;
@@ -42,7 +43,39 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void AddEmployee()
         {
-            
+            if (String.IsNullOrWhiteSpace(AddFirstName) || String.IsNullOrWhiteSpace(AddLastName) ||
+                String.IsNullOrWhiteSpace(AddEmailAddress) || String.IsNullOrWhiteSpace(AddPhoneNumber))
+            {
+                MessageBox.Show("Please do not leave any fields blank.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            Employee employee = new Employee()
+            {
+                FirstName = AddFirstName.Trim(),
+                LastName = AddLastName.Trim(),
+                EmailAddress = AddEmailAddress.Trim(),
+                PhoneNumber = AddPhoneNumber.Trim()
+            };
+
+            if (DataAccess.AddEmployee(employee))
+            {
+                MessageBox.Show($"The employee, {AddFirstName} {AddLastName}, was added to the database.",
+                    "Operation Successful",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                this.TryClose();
+            }
+            else
+            {
+                MessageBox.Show($"Unable to add the employee, {AddFirstName} {AddLastName}, to the database.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void Cancel()
+        {
+            this.TryClose();
         }
     }
 
