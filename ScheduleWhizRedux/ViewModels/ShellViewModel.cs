@@ -18,13 +18,18 @@ namespace ScheduleWhizRedux.ViewModels
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
         private Job _selectedJob;
+        private readonly AddEmployeeViewModel addEmployeeViewModel;
+        private readonly IWindowManager windowManager;
         //private List<string> _availableJobs;
         //private List<string> _assignedJobs;
         
+
         public ShellViewModel()
         {
-            Employees = new BindableCollection<Employee>(DataAccess.GetAllPeople());
+            Employees = new BindableCollection<Employee>(DataAccess.GetAllEmployees());
             AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+            windowManager = new WindowManager();
+            addEmployeeViewModel = new AddEmployeeViewModel();
         }
 
         public BindableCollection<Job> AllJobs
@@ -36,7 +41,11 @@ namespace ScheduleWhizRedux.ViewModels
         public BindableCollection<Employee> Employees
         {
             get { return _employees; }
-            set { _employees = value; }
+            set
+            {
+                _employees = value;
+                NotifyOfPropertyChange(() => Employees);
+            }
         }
 
         public Employee SelectedEmployee
@@ -57,6 +66,11 @@ namespace ScheduleWhizRedux.ViewModels
                 _selectedJob = value;
                 NotifyOfPropertyChange(() => SelectedJob);
             }
+        }
+
+        public void AddEmployee()
+        {
+            windowManager.ShowWindow(addEmployeeViewModel);
         }
 
         // Works automagically with clear text using Caliburn Micro.

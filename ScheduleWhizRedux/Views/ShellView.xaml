@@ -37,9 +37,9 @@
                     DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedEmployee, Mode=OneWayToSource}"
                     Width="250" Margin="5" />
 
-                <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
-                <Button Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
-                <Button Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+                <Button x:Name="AddEmployee" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button x:Name="ModifyEmployee" Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button x:Name="RemoveEmployee" Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
 
                 <!-- Row 2 -->
                 <TextBlock Text="Employees" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
@@ -114,9 +114,9 @@
                          DisplayMemberPath="Title" Width="250" Margin="5"
                          SelectedItem="{Binding Path=SelectedJob, Mode=OneWayToSource}" />
 
-                <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
-                <Button Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
-                <Button Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+                <Button x:Name="AddJob" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button x:Name="ModifyJob" Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button x:Name="RemoveJob" Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
 
                 <!-- Row 2 -->
                 <TextBlock Text="Jobs" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
