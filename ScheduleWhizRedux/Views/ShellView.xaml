@@ -33,8 +33,8 @@
                 </Grid.RowDefinitions>
 
                 <!-- Row 1 -->
-                <ListBox x:Name="People" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
-                    DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedPerson, Mode=OneWayToSource}"
+                <ListBox x:Name="Employees" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
+                    DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedEmployee, Mode=OneWayToSource}"
                     Width="250" Margin="5" />
 
                 <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
@@ -47,11 +47,11 @@
                    FontSize="48" FontWeight="Bold" />
 
                 <!-- Row 3 -->
-                <TextBlock x:Name="SelectedPerson_FullName" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                <TextBlock x:Name="SelectedEmployee_FullName" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
                     TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
 
                 <!-- Row 4 -->
-                <TextBlock x:Name="SelectedPerson_Details" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3"
+                <TextBlock x:Name="SelectedEmployee_Details" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3"
                     TextAlignment="Center" HorizontalAlignment="Center" FontSize="22" Margin="5, 0, 5, 5" />
 
                 <!-- Row 5 -->
@@ -71,9 +71,9 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="SelectedPerson_AssignedJobs"
+                    <ListBox x:Name="SelectedEmployee_AssignedJobs"
                              Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"></ListBox>
-                    <ListBox x:Name="SelectedPerson_AvailableJobs"
+                    <ListBox x:Name="SelectedEmployee_AvailableJobs"
                              Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5"></ListBox>
                 </Grid>
                 <!-- Some code I might want to use later -->
