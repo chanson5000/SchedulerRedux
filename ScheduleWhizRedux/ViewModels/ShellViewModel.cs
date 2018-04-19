@@ -17,6 +17,7 @@ namespace ScheduleWhizRedux.ViewModels
         private BindableCollection<Employee> _peopleFound = new BindableCollection<Employee>();
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
+        private Job _selectedJob;
         //private List<string> _availableJobs;
         //private List<string> _assignedJobs;
         
@@ -45,6 +46,16 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 _selectedEmployee = value;
                 NotifyOfPropertyChange(() => SelectedEmployee);
+            }
+        }
+
+        public Job SelectedJob
+        {
+            get { return _selectedJob; }
+            set
+            {
+                _selectedJob = value;
+                NotifyOfPropertyChange(() => SelectedJob);
             }
         }
 

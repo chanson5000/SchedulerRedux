@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
         mc:Ignorable="d" FontSize="18"
-        Title="ShellView" Height="450" Width="Auto" WindowStartupLocation="CenterScreen">
+        Title="ShellView" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
     <TabControl>
         <!-- Tab 1 - Modifty Employees -->
         <TabItem Header="Modify Employees">
-            <Grid>
+            <Grid Height="350">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="Auto" />
@@ -84,8 +84,8 @@
                         x:Name="ActiveItem" />-->
             </Grid>
         </TabItem>
-        <!-- Tab 2 - Modify Jobs/Shifts -->
-        <TabItem Header="Modify Jobs/Shifts">
+        <!-- Tab 2 - Modify Jobs -->
+        <TabItem Header="Modify Jobs">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
@@ -109,7 +109,49 @@
                     <RowDefinition Height="20" />
                 </Grid.RowDefinitions>
 
-                <ListBox></ListBox>
+                <!-- Row 1 -->
+                <ListBox x:Name="AllJobs" Grid.Row="1" Grid.Column="1" Grid.RowSpan="6"
+                         DisplayMemberPath="Title" Width="250" Margin="5"
+                         SelectedItem="{Binding Path=SelectedJob, Mode=OneWayToSource}" />
+
+                <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+
+                <!-- Row 2 -->
+                <TextBlock Text="Jobs" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
+                           TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
+                           FontSize="48" FontWeight="Bold" />
+                
+                <!-- Row 3 -->
+                <TextBlock x:Name="SelectedJob_Title" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                           TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
+            </Grid>
+        </TabItem>
+        
+        <TabItem Header="Modify Shifts">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
 
             </Grid>
         </TabItem>
