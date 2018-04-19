@@ -29,7 +29,7 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Employee>("select * from Employees order by FirstName, LastName, Id").ToList();
+                var result = connection.Query<Employee>("select * from Employees order by LOWER(FirstName), LOWER(LastName), LOWER(Id);").ToList();
 
                 return result;
             }
@@ -50,6 +50,19 @@ namespace ScheduleWhizRedux.Helpers
                         employee.EmailAddress,
                         employee.PhoneNumber
                     });
+
+                if (result == 0) return false;
+                return true;
+            }
+        }
+
+        public static bool RemoveEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string insertQuery = "DELETE FROM Employees WHERE Id = @Id;";
+
+                var result = connection.Execute(insertQuery, new {employee.Id});
 
                 if (result == 0) return false;
                 return true;
