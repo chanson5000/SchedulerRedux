@@ -15,16 +15,6 @@ namespace ScheduleWhizRedux.Helpers
     public static class DataAccess
     {
         // Employee DataAcess
-        public static List<Employee> GetPeople(string lastName)
-        {
-            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
-            {
-                var result = connection.Query<Employee>("select * from Employees where LastName = @LastName", new { LastName = lastName }).ToList();
-
-                return result;
-            }
-        }
-
         public static Employee GetEmployeeFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
@@ -35,7 +25,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public static List<Employee> GetAllPeople()
+        public static List<Employee> GetAllEmployees()
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
