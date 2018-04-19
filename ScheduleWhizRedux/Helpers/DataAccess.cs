@@ -14,6 +14,7 @@ namespace ScheduleWhizRedux.Helpers
 {
     public static class DataAccess
     {
+        // Employee DataAcess
         public static List<Employee> GetPeople(string lastName)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.CnnVal("SWReDB")))
@@ -44,6 +45,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
+        // Job DataAccess
         public static string GetJobTitleFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.CnnVal("SWReDB")))
@@ -65,6 +67,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
+        // AssignedJob DataAccess
         public static List<string> GetEmployeeAssignedJobs(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
