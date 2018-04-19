@@ -98,9 +98,13 @@
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\AssignedShift.cs" />
+    <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
     <Compile Include="ViewModels\FirstChildViewModel.cs" />
     <Compile Include="ViewModels\SecondChildViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\AddEmployeeView.xaml.cs">
+      <DependentUpon>AddEmployeeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FirstChildView.xaml.cs">
       <DependentUpon>FirstChildView.xaml</DependentUpon>
     </Compile>
@@ -141,6 +145,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\AddEmployeeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FirstChildView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

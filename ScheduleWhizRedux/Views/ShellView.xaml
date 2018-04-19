@@ -5,10 +5,87 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
         mc:Ignorable="d" FontSize="18"
-        Title="ShellView" Height="450" Width="Auto" WindowStartupLocation="CenterScreen">
+        Title="ShellView" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
     <TabControl>
         <!-- Tab 1 - Modifty Employees -->
         <TabItem Header="Modify Employees">
+            <Grid Height="350">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
+
+                <!-- Row 1 -->
+                <ListBox x:Name="Employees" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
+                    DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedEmployee, Mode=OneWayToSource}"
+                    Width="250" Margin="5" />
+
+                <Button x:Name="AddEmployee" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button x:Name="ModifyEmployee" Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button x:Name="RemoveEmployee" Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+
+                <!-- Row 2 -->
+                <TextBlock Text="Employees" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
+                   TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
+                   FontSize="48" FontWeight="Bold" />
+
+                <!-- Row 3 -->
+                <TextBlock x:Name="SelectedEmployee_FullName" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
+
+                <!-- Row 4 -->
+                <TextBlock x:Name="SelectedEmployee_Details" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3"
+                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="22" Margin="5, 0, 5, 5" />
+
+                <!-- Row 5 -->
+                <TextBlock Text="Assigned" Grid.Row="5" Grid.Column="2" TextAlignment="Center" Margin="0, 5, 0, 0"
+                   VerticalAlignment="Center" />
+                <Button Content="Swap Job" Grid.Row="5" Grid.Column="3" Margin="0, 5, 0, 0" />
+                <TextBlock Text="Available" Grid.Row="5" Grid.Column="4" TextAlignment="Center" Margin="0, 5, 0 ,0"
+                   VerticalAlignment="Center" />
+                <!-- Row 6 -->
+                <Grid Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="SelectedEmployee_AssignedJobs"
+                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"></ListBox>
+                    <ListBox x:Name="SelectedEmployee_AvailableJobs"
+                             Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5"></ListBox>
+                </Grid>
+                <!-- Some code I might want to use later -->
+                <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
+                <Button x:Name="LoadPageTwo" Grid.Row="6" Grid.Column="2">Load Second Page</Button>-->
+                <!--<Button Grid.Row="6" Grid.Column="3" x:Name="SearchPeople">Search</Button>-->
+                <!--<ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
+                        x:Name="ActiveItem" />-->
+            </Grid>
+        </TabItem>
+        <!-- Tab 2 - Modify Jobs -->
+        <TabItem Header="Modify Jobs">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
@@ -33,59 +110,26 @@
                 </Grid.RowDefinitions>
 
                 <!-- Row 1 -->
-                <ListBox x:Name="People" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
-                    DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedPerson, Mode=OneWayToSource}"
-                    Width="250" Margin="5" />
+                <ListBox x:Name="AllJobs" Grid.Row="1" Grid.Column="1" Grid.RowSpan="6"
+                         DisplayMemberPath="Title" Width="250" Margin="5"
+                         SelectedItem="{Binding Path=SelectedJob, Mode=OneWayToSource}" />
 
-                <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
-                <Button Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
-                <Button Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+                <Button x:Name="AddJob" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button x:Name="ModifyJob" Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button x:Name="RemoveJob" Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
 
                 <!-- Row 2 -->
-                <TextBlock Text="Employees" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
-                   TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
-                   FontSize="48" FontWeight="Bold" />
-
+                <TextBlock Text="Jobs" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
+                           TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
+                           FontSize="48" FontWeight="Bold" />
+                
                 <!-- Row 3 -->
-                <TextBlock x:Name="SelectedPerson_FullName" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
-                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
-
-                <!-- Row 4 -->
-                <TextBlock x:Name="SelectedPerson_Details" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3"
-                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="22" Margin="5, 0, 5, 5" />
-
-                <!-- Row 5 -->
-                <TextBlock Text="Assigned" Grid.Row="5" Grid.Column="2" TextAlignment="Center" Margin="0, 5, 0, 0"
-                   VerticalAlignment="Center" />
-                <Button Content="Swap Job" Grid.Row="5" Grid.Column="3" Margin="0, 5, 0, 0" />
-                <TextBlock Text="Available" Grid.Row="5" Grid.Column="4" TextAlignment="Center" Margin="0, 5, 0 ,0"
-                   VerticalAlignment="Center" />
-                <!-- Row 6 -->
-                <Grid Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ListBox x:Name="SelectedPerson_AssignedJobs"
-                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"></ListBox>
-                    <ListBox x:Name="SelectedPerson_AvailableJobs"
-                             Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5"></ListBox>
-                </Grid>
-                <!-- Some code I might want to use later -->
-                <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
-                <Button x:Name="LoadPageTwo" Grid.Row="6" Grid.Column="2">Load Second Page</Button>-->
-                <!--<Button Grid.Row="6" Grid.Column="3" x:Name="SearchPeople">Search</Button>-->
-                <!--<ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
-                        x:Name="ActiveItem" />-->
+                <TextBlock x:Name="SelectedJob_Title" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                           TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
             </Grid>
         </TabItem>
-        <!-- Tab 2 - Modify Jobs/Shifts -->
-        <TabItem Header="Modify Jobs/Shifts">
+        
+        <TabItem Header="Modify Shifts">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
@@ -108,8 +152,6 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="20" />
                 </Grid.RowDefinitions>
-
-                <ListBox></ListBox>
 
             </Grid>
         </TabItem>
