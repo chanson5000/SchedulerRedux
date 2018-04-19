@@ -5,50 +5,113 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
         mc:Ignorable="d" FontSize="18"
-        Title="ShellView" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
-        
-        <!-- Row 1 -->
-        <TextBlock Text="{Binding Path=FullName, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"></TextBlock>
-        
-        <!-- Row 2 -->
-        <TextBox MinWidth="100" Grid.Row="2" Grid.Column="1" x:Name="FirstName"></TextBox>
-        <TextBox MinWidth="100" Grid.Row="2" Grid.Column="2" x:Name="LastName"></TextBox>
-        
-        <!-- Row 3 -->
-        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="People"
-                  SelectedItem="{Binding Path=SelectedPerson, Mode=OneWayToSource}"
-                  DisplayMemberPath="FirstName" />
-        <TextBlock Grid.Row="3" Grid.Column="2" x:Name="SelectedPerson_LastName" />
-        
-        <!-- Row 4 -->
-        <Button x:Name="ClearText" Grid.Row="4" Grid.Column="1">Clear Text</Button>
-        
-        <!-- Row 5 -->
-        <Button x:Name="LoadPageOne" Grid.Row="5" Grid.Column="1">Load First Page</Button>
-        <Button x:Name="LoadPageTwo" Grid.Row="5" Grid.Column="2">Load Second Page</Button>
+        Title="ShellView" Height="450" Width="Auto" WindowStartupLocation="CenterScreen">
+    <TabControl>
+        <!-- Tab 1 - Modifty Employees -->
+        <TabItem Header="Modify Employees">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
 
-        <!-- Row 6 -->
-        <ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
-                        x:Name="ActiveItem" />
-    </Grid>
+                <!-- Row 1 -->
+                <ListBox x:Name="People" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
+                    DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedPerson, Mode=OneWayToSource}"
+                    Width="250" Margin="5" />
+
+                <Button Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
+                <Button Content="Modify" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <Button Content="Remove"  Grid.Row="1" Grid.Column="4" Margin="5" />
+
+                <!-- Row 2 -->
+                <TextBlock Text="Employees" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
+                   TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
+                   FontSize="48" FontWeight="Bold" />
+
+                <!-- Row 3 -->
+                <TextBlock x:Name="SelectedPerson_FullName" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
+
+                <!-- Row 4 -->
+                <TextBlock x:Name="SelectedPerson_Details" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3"
+                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="22" Margin="5, 0, 5, 5" />
+
+                <!-- Row 5 -->
+                <TextBlock Text="Assigned" Grid.Row="5" Grid.Column="2" TextAlignment="Center" Margin="0, 5, 0, 0"
+                   VerticalAlignment="Center" />
+                <Button Content="Swap Job" Grid.Row="5" Grid.Column="3" Margin="0, 5, 0, 0" />
+                <TextBlock Text="Available" Grid.Row="5" Grid.Column="4" TextAlignment="Center" Margin="0, 5, 0 ,0"
+                   VerticalAlignment="Center" />
+                <!-- Row 6 -->
+                <Grid Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="SelectedPerson_AssignedJobs"
+                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"></ListBox>
+                    <ListBox x:Name="SelectedPerson_AvailableJobs"
+                             Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5"></ListBox>
+                </Grid>
+                <!-- Some code I might want to use later -->
+                <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
+                <Button x:Name="LoadPageTwo" Grid.Row="6" Grid.Column="2">Load Second Page</Button>-->
+                <!--<Button Grid.Row="6" Grid.Column="3" x:Name="SearchPeople">Search</Button>-->
+                <!--<ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
+                        x:Name="ActiveItem" />-->
+            </Grid>
+        </TabItem>
+        <!-- Tab 2 - Modify Jobs/Shifts -->
+        <TabItem Header="Modify Jobs/Shifts">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
+
+                <ListBox></ListBox>
+
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
