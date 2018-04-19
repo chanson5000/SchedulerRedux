@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ScheduleWhizRedux.Models
 {
-    public class PersonModel
+    public class Job
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
     }
 }

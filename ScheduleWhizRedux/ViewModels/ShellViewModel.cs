@@ -3,60 +3,88 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Media.Imaging;
 using Caliburn.Micro;
+using ScheduleWhizRedux.Helpers;
 using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.ViewModels
 {
     public class ShellViewModel: Conductor<object>
     {
-        private string _firstName = "Cory";
-        private string _lastName;
-        private BindableCollection<PersonModel> _people = new BindableCollection<PersonModel>();
-        private PersonModel _selectedPerson;
-
+        private BindableCollection<Employee> _people = new BindableCollection<Employee>();
+        private BindableCollection<Employee> _peopleFound = new BindableCollection<Employee>();
+        //private List<string> _availableJobs;
+        //private List<string> _assignedJobs;
+        private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
+        private Employee _selectedPerson;
+        //readonly DataAccess db = new DataAccess();
+        
         public ShellViewModel()
         {
-            People.Add(new PersonModel { FirstName = "Cory", LastName = "Hanson" });
-            People.Add(new PersonModel { FirstName = "Bill", LastName = "Jones" });
-            People.Add(new PersonModel { FirstName = "Sue", LastName = "Storm" });
-
+            People = new BindableCollection<Employee>(DataAccess.GetAllPeople());
+            AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
         }
 
-        public string FirstName
+        //public void EmployeeJobs()
+        //{
+        //    AssignedJobs = DataAccess.GetEmployeeAssignedJobs(SelectedPerson.Id);
+        //    List<string> unAssignedJobs = new List<string>();
+        //    foreach (var job in AssignedJobs)
+        //    {
+        //        if (!AssignedJobs.Contains(job))
+        //        {
+        //            unAssignedJobs.Add(job);
+        //        }
+        //    }
+
+        //    AvailableJobs = unAssignedJobs;
+        //}
+
+        public BindableCollection<Job> AllJobs
         {
-            get { return _firstName; }
-            set
-            {
-                _firstName = value; 
-                NotifyOfPropertyChange(() => FirstName);
-                NotifyOfPropertyChange(() => FullName);
-            }
+            get { return _allJobs; }
+            set { _allJobs = value; }
         }
 
-        public string LastName
-        {
-            get { return _lastName; }
-            set
-            {
-                _lastName = value;
-                NotifyOfPropertyChange(() => LastName);
-                NotifyOfPropertyChange(() => FullName);
-            }
-        }
+        //public List<string> AvailableJobs
+        //{
+        //    get { return _availableJobs; }
+        //    set
+        //    {
+        //        _assignedJobs = value;
+        //        NotifyOfPropertyChange(() => AvailableJobs);
+        //    }
+        //}
 
-        public string FullName
-        {
-            get { return $"{FirstName} {LastName}"; }
-        }
+        //public List<string> AssignedJobs
+        //{
+        //    get { return _assignedJobs; }
+        //    set
+        //    {
+        //        _assignedJobs = value;
+        //        NotifyOfPropertyChange(() => AssignedJobs);
+        //    }
+        //}
 
-        public BindableCollection<PersonModel> People
+        public BindableCollection<Employee> People
         {
             get { return _people; }
             set { _people = value; }
         }
 
-        public PersonModel SelectedPerson
+        //public BindableCollection<Employee> PeopleFound
+        //{
+        //    get { return _peopleFound; }
+        //    set
+        //    {
+        //        _peopleFound = value;
+        //        NotifyOfPropertyChange(() => PeopleFound);
+        //    }
+        //}
+
+        public Employee SelectedPerson
         {
             get { return _selectedPerson; }
             set
@@ -73,12 +101,6 @@ namespace ScheduleWhizRedux.ViewModels
             return !String.IsNullOrWhiteSpace(firstName) || !String.IsNullOrWhiteSpace(lastName);
         }   
 
-        public void ClearText(string firstName, string lastName)
-        {
-            FirstName = "";
-            LastName = "";
-        }
-
         public void LoadPageOne()
         {
             ActivateItem(new FirstChildViewModel());
@@ -88,7 +110,6 @@ namespace ScheduleWhizRedux.ViewModels
         {
             ActivateItem(new SecondChildViewModel());
         }
-
 
     }
 
