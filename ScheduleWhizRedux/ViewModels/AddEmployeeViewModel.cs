@@ -16,6 +16,12 @@ namespace ScheduleWhizRedux.ViewModels
         private string _addLastName;
         private string _addEmailAddress;
         private string _addPhoneNumber;
+        private DataAccess db;
+
+        public AddEmployeeViewModel()
+        {
+            db = new DataAccess();
+        }
 
         public string AddFirstName
         {
@@ -59,13 +65,12 @@ namespace ScheduleWhizRedux.ViewModels
                 PhoneNumber = AddPhoneNumber.Trim()
             };
 
-            if (DataAccess.AddEmployee(employee))
+            if (db.AddEmployee(employee))
             {
-                
                 MessageBox.Show($"The employee, {AddFirstName} {AddLastName}, was added to the database.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                this.TryClose(true);
+                TryClose(true);
             }
             else
             {
@@ -76,7 +81,7 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void Cancel()
         {
-            this.TryClose();
+            TryClose(false);
         }
     }
 

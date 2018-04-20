@@ -13,6 +13,12 @@ namespace ScheduleWhizRedux.ViewModels
     class ModifyEmployeeViewModel : Screen
     {
         private Employee _modifyingEmployee;
+        private DataAccess db;
+
+        public ModifyEmployeeViewModel()
+        {
+            db = new DataAccess();
+        }
 
         public Employee ModifyingEmployee
         {
@@ -30,13 +36,13 @@ namespace ScheduleWhizRedux.ViewModels
                 return;
             }
 
-            if (DataAccess.ModifyEmployee(ModifyingEmployee))
+            if (db.ModifyEmployee(ModifyingEmployee))
             {
 
                 MessageBox.Show($"The employee, {ModifyingEmployee.FirstName} {ModifyingEmployee.LastName}, was modified.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                this.TryClose(true);
+                TryClose(true);
             }
             else
             {
