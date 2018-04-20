@@ -12,12 +12,6 @@ namespace ScheduleWhizRedux.ViewModels
     public class ModifyJobViewModel : Screen
     {
         private string _modifiedJob;
-        private DataAccess db;
-
-        public ModifyJobViewModel()
-        {
-            db = new DataAccess();
-        }
 
         public string ModifiedJob
         {
@@ -34,7 +28,7 @@ namespace ScheduleWhizRedux.ViewModels
                 return;
             }
 
-            if (db.AddJob(ModifiedJob.Trim()))
+            if (DataAccess.AddJob(ModifiedJob.Trim()))
             {
                 MessageBox.Show($"The job, {ModifiedJob}, was modified.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
