@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
-        mc:Ignorable="d"
-        Title="Schedule Whiz - Add New Employee" Width="400" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Title="Schedule Whiz - Add New Employee" Width="400" SizeToContent="Height">
     <StackPanel>
         <StackPanel>
-            <TextBlock TextAlignment="Center" FontSize="28" FontWeight="Bold" Margin="5">Add New Employee</TextBlock>
+            <TextBlock Text="Add New Employee" TextAlignment="Center" FontSize="28" FontWeight="Bold" Margin="5" />
         </StackPanel>
         <Separator />
         <StackPanel Margin="10">
