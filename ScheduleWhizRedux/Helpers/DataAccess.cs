@@ -13,10 +13,10 @@ using Dapper;
 
 namespace ScheduleWhizRedux.Helpers
 {
-    public class DataAccess
+    public static class DataAccess
     {
         // Employee DataAcess
-        public Employee GetEmployeeFromId(int id)
+        public static Employee GetEmployeeFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -29,7 +29,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public List<Employee> GetAllEmployees()
+        public static List<Employee> GetAllEmployees()
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -39,7 +39,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool AddEmployee(Employee employee)
+        public static bool AddEmployee(Employee employee)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -59,7 +59,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool ModifyEmployee(Employee employee)
+        public static bool ModifyEmployee(Employee employee)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -80,7 +80,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool RemoveEmployee(Employee employee)
+        public static bool RemoveEmployee(Employee employee)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -96,7 +96,7 @@ namespace ScheduleWhizRedux.Helpers
         }
 
         // Job DataAccess
-        public string GetJobTitleFromId(int id)
+        public static string GetJobTitleFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -110,7 +110,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool JobExists(string title)
+        public static bool JobExists(string title)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -122,7 +122,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public List<Job> GetAllJobs()
+        public static List<Job> GetAllJobs()
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -132,7 +132,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool AddJob(string job)
+        public static bool AddJob(string job)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -147,7 +147,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool ModifyJob(Job job)
+        public static bool ModifyJob(Job job)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -164,7 +164,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public bool RemoveJob(Job job)
+        public static bool RemoveJob(Job job)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -182,7 +182,7 @@ namespace ScheduleWhizRedux.Helpers
 
 
         // AssignedJob DataAccess
-        public List<string> GetEmployeeAssignedJobs(int id)
+        public static List<string> GetEmployeeAssignedJobs(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -205,7 +205,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public List<string> GetEmployeeAvailableJobs(int id)
+        public static List<string> GetEmployeeAvailableJobs(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
