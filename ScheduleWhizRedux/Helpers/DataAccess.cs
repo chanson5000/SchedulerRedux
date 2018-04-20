@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using ScheduleWhizRedux.Models;
 using Dapper;
 
@@ -15,11 +16,59 @@ namespace ScheduleWhizRedux.Helpers
     public static class DataAccess
     {
         // Employee DataAcess
+        public static bool AddEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string insertQuery = "INSERT INTO Employees (FirstName, LastName, EmailAddress, PhoneNumber)" +
+                                     "VALUES (@FirstName, @LastName, @EmailAddress, @PhoneNumber);";
+
+                var result = connection.Execute(insertQuery,
+                    new
+                    {
+                        employee.FirstName,
+                        employee.LastName,
+                        employee.EmailAddress,
+                        employee.PhoneNumber
+                    });
+
+                return result != 0;
+            }
+        }
+
+        // Get Id from Employee // For unit testing purposes.
+        public static int GetIdFromEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query = "select * from Employees where " +
+                            "FirstName = @FirstName and " +
+                            "LastName = @LastName and " +
+                            "EmailAddress = @EmailAddress and " +
+                            "PhoneNumber = @PhoneNumber;";
+
+                var result = connection.QueryFirstOrDefault<Employee>(query, new
+                {
+                    employee.FirstName,
+                    employee.LastName,
+                    employee.EmailAddress,
+                    employee.PhoneNumber
+                });
+
+                if (result == null) return 0;
+                return result.Id;
+
+            }
+        }
+
         public static Employee GetEmployeeFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Employee>("select * from Employees where Id = @Id", new { Id = id }).First();
+                var result = connection.Query<Employee>("select * from Employees where Id = @Id;", new
+                {
+                    Id = id
+                }).First();
 
                 return result;
             }
@@ -35,12 +84,13 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public static bool AddEmployee(Employee employee)
+
+        public static bool ModifyEmployee(Employee employee)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                string insertQuery = "INSERT INTO Employees (FirstName, LastName, EmailAddress, PhoneNumber)" +
-                                     "VALUES (@FirstName, @LastName, @EmailAddress, @PhoneNumber)";
+                string insertQuery =
+                    "update Employees set FirstName = @FirstName, LastName = @LastName, EmailAddress = @EmailAddress, PhoneNumber = @PhoneNumber where Id = @Id;";
 
                 var result = connection.Execute(insertQuery,
                     new
@@ -48,11 +98,11 @@ namespace ScheduleWhizRedux.Helpers
                         employee.FirstName,
                         employee.LastName,
                         employee.EmailAddress,
-                        employee.PhoneNumber
+                        employee.PhoneNumber,
+                        employee.Id
                     });
 
-                if (result == 0) return false;
-                return true;
+                return result != 0;
             }
         }
 
@@ -62,10 +112,12 @@ namespace ScheduleWhizRedux.Helpers
             {
                 string insertQuery = "DELETE FROM Employees WHERE Id = @Id;";
 
-                var result = connection.Execute(insertQuery, new {employee.Id});
+                var result = connection.Execute(insertQuery, new
+                {
+                    employee.Id
+                });
 
-                if (result == 0) return false;
-                return true;
+                return result != 0;
             }
         }
 
@@ -74,10 +126,25 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Job>("select Title from Jobs where Id = @Id",
-                    new { Id = id }).ToString();
+                var result = connection.Query<Job>("select Title from Jobs where Id = @Id;",
+                    new
+                    {
+                        Id = id
+                    }).ToString();
 
                 return result;
+            }
+        }
+
+        public static bool JobExists(string title)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string query = "select * from Jobs where Titel = @Title;";
+
+                var result = connection.QueryFirstOrDefault(query, new {Title = title});
+
+                return result != null;
             }
         }
 
@@ -85,11 +152,60 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Job>("select * from Jobs order by Title;").ToList();
+                var result = connection.Query<Job>("select * from Jobs order by LOWER(Title);").ToList();
 
                 return result;
             }
         }
+
+        public static bool AddJob(string job)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string insertQuery = "INSERT INTO Jobs (Title) VALUES (@Title);";
+
+                int result = connection.Execute(insertQuery, new
+                {
+                    Title = job
+                });
+
+                return result != 0;
+            }
+        }
+
+        public static bool ModifyJob(Job job)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string updateQuery = "UPDATE Jobs SET Title = @Title WHERE Id = @Id;";
+
+                int result = connection.Execute(updateQuery,
+                    new
+                    {
+                        job.Title,
+                        job.Id
+                    });
+
+                return result != 0;
+            }
+        }
+
+        public static bool RemoveJob(Job job)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string deleteQuery = "DELETE FROM Jobs WHERE Id = @Id;";
+
+                int result = connection.Execute(deleteQuery,
+                    new
+                    {
+                        job.Id
+                    });
+
+                return result != 0;
+            }
+        }
+
 
         // AssignedJob DataAccess
         public static List<string> GetEmployeeAssignedJobs(int id)

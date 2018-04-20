@@ -15,16 +15,15 @@ namespace ScheduleWhizRedux.ViewModels
     public class ShellViewModel : Conductor<object>
     {
         private BindableCollection<Employee> _employees = new BindableCollection<Employee>();
-        private BindableCollection<Employee> _peopleFound = new BindableCollection<Employee>();
+        //private BindableCollection<Employee> _peopleFound = new BindableCollection<Employee>();
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
         private Job _selectedJob;
         private readonly AddEmployeeViewModel addEmployeeViewModel;
-
+        private readonly ModifyEmployeeViewModel modifyEmployeeViewModel;
+        private readonly AddJobViewModel addJobViewModel;
+        private readonly ModifyJobViewModel modifyJobViewModel;
         private readonly IWindowManager windowManager;
-        //private List<string> _availableJobs;
-        //private List<string> _assignedJobs;
-
 
         public ShellViewModel()
         {
@@ -32,12 +31,19 @@ namespace ScheduleWhizRedux.ViewModels
             AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
             windowManager = new WindowManager();
             addEmployeeViewModel = new AddEmployeeViewModel();
+            modifyEmployeeViewModel = new ModifyEmployeeViewModel();
+            addJobViewModel = new AddJobViewModel();
+            modifyJobViewModel = new ModifyJobViewModel();
         }
 
         public BindableCollection<Job> AllJobs
         {
             get { return _allJobs; }
-            set { _allJobs = value; }
+            set
+            {
+                _allJobs = value;
+                NotifyOfPropertyChange(() => AllJobs);
+            }
         }
 
         public BindableCollection<Employee> Employees
@@ -106,33 +112,91 @@ namespace ScheduleWhizRedux.ViewModels
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
-            // Works automagically with clear text using Caliburn Micro.
-            // Its all about the naming conventions.
-            // This code may be useful to have as a reference for later.
-            //public bool CanClearText(string firstName, string lastName)
-            //{
-            //    return !String.IsNullOrWhiteSpace(firstName) || !String.IsNullOrWhiteSpace(lastName);
-            //}   
-
-            //public void LoadPageOne()
-            //{
-            //    ActivateItem(new FirstChildViewModel());
-            //}
-
-            //public void LoadPageTwo()
-            //{
-            //    ActivateItem(new SecondChildViewModel());
-            //}
-            //public BindableCollection<Employee> PeopleFound
-            //{
-            //    get { return _peopleFound; }
-            //    set
-            //    {
-            //        _peopleFound = value;
-            //        NotifyOfPropertyChange(() => PeopleFound);
-            //    }
-            //}
         }
+
+        public void ModifyEmployee()
+        {
+            if (SelectedEmployee == null) return;
+            modifyEmployeeViewModel.ModifyingEmployee = SelectedEmployee;
+            var result = windowManager.ShowDialog(modifyEmployeeViewModel);
+            if (result == true)
+            {
+                Employees = new BindableCollection<Employee>(DataAccess.GetAllEmployees());
+            }
+        }
+
+        public void AddJob()
+        {
+            var result = windowManager.ShowDialog(addJobViewModel);
+            if (result == true)
+            {
+                AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+            }
+        }
+
+        public void ModifyJob()
+        {
+            if (SelectedJob == null) return;
+            modifyJobViewModel.ModifiedJob = SelectedJob.Title;
+            var result = windowManager.ShowDialog(modifyJobViewModel);
+            if (result == true)
+            {
+                AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+            }
+        }
+
+        public void RemoveJob()
+        {
+            if (MessageBox.Show("Do you really want to remove the job from the database? This cannot be undone.",
+                    "Remove Job?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                // Do nothing if user says no.
+            }
+            else
+            {
+                if (DataAccess.RemoveJob(SelectedJob))
+                {
+                    AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+                    MessageBox.Show("The the job was removed from the database.", "Operation Successful",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Unable to remove the employee from the database.", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+
+
+        // Works automagically with clear text using Caliburn Micro.
+        // Its all about the naming conventions.
+        // This code may be useful to have as a reference for later.
+        //public bool CanClearText(string firstName, string lastName)
+        //{
+        //    return !String.IsNullOrWhiteSpace(firstName) || !String.IsNullOrWhiteSpace(lastName);
+        //}   
+
+        //public void LoadPageOne()
+        //{
+        //    ActivateItem(new FirstChildViewModel());
+        //}
+
+        //public void LoadPageTwo()
+        //{
+        //    ActivateItem(new SecondChildViewModel());
+        //}
+        //public BindableCollection<Employee> PeopleFound
+        //{
+        //    get { return _peopleFound; }
+        //    set
+        //    {
+        //        _peopleFound = value;
+        //        NotifyOfPropertyChange(() => PeopleFound);
+        //    }
+        //}
+
     }
 }
