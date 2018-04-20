@@ -25,7 +25,6 @@ namespace ScheduleWhizRedux.ViewModels
         private readonly ModifyJobViewModel modifyJobViewModel;
         private readonly IWindowManager windowManager;
 
-
         public ShellViewModel()
         {
             Employees = new BindableCollection<Employee>(DataAccess.GetAllEmployees());
