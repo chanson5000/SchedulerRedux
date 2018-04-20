@@ -122,17 +122,35 @@ namespace ScheduleWhizRedux.Helpers
         }
 
         // Job DataAccess
-        public static string GetJobTitleFromId(int id)
+        public static Job GetJobFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Job>("select Title from Jobs where Id = @Id;",
+                var queryString = "select * from Jobs where Id @Id;";
+
+                Job result = connection.Query<Job>(queryString,
                     new
                     {
                         Id = id
-                    }).ToString();
+                    }).First();
 
                 return result;
+            }
+        }
+
+        public static int GetJobIdFromTitle(string jobTitle)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var queryString = "select Id from Jobs where Title = @Title;";
+
+                var result = connection.QueryFirstOrDefault<Job>(queryString,
+                    new
+                    {
+                        Title = jobTitle
+                    });
+
+                return result.Id;
             }
         }
 
