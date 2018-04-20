@@ -12,12 +12,6 @@ namespace ScheduleWhizRedux.ViewModels
     public class AddJobViewModel : Screen
     {
         private string _newJob;
-        private DataAccess db;
-
-        public AddJobViewModel()
-        {
-            db = new DataAccess();
-        }
 
         public string NewJob
         {
@@ -34,7 +28,7 @@ namespace ScheduleWhizRedux.ViewModels
                 return;
             }
 
-            if (db.AddJob(NewJob.Trim()))
+            if (DataAccess.AddJob(NewJob.Trim()))
             {
                 MessageBox.Show($"The job, {NewJob}, was added to the database.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
