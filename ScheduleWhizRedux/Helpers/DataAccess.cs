@@ -16,6 +16,51 @@ namespace ScheduleWhizRedux.Helpers
     public static class DataAccess
     {
         // Employee DataAcess
+        public static bool AddEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string insertQuery = "INSERT INTO Employees (FirstName, LastName, EmailAddress, PhoneNumber)" +
+                                     "VALUES (@FirstName, @LastName, @EmailAddress, @PhoneNumber);";
+
+                var result = connection.Execute(insertQuery,
+                    new
+                    {
+                        employee.FirstName,
+                        employee.LastName,
+                        employee.EmailAddress,
+                        employee.PhoneNumber
+                    });
+
+                return result != 0;
+            }
+        }
+
+        // Get Id from Employee // For unit testing purposes.
+        public static int GetIdFromEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query = "select * from Employees where " +
+                            "FirstName = @FirstName and " +
+                            "LastName = @LastName and " +
+                            "EmailAddress = @EmailAddress and " +
+                            "PhoneNumber = @PhoneNumber;";
+
+                var result = connection.QueryFirstOrDefault<Employee>(query, new
+                {
+                    employee.FirstName,
+                    employee.LastName,
+                    employee.EmailAddress,
+                    employee.PhoneNumber
+                });
+
+                if (result == null) return 0;
+                return result.Id;
+
+            }
+        }
+
         public static Employee GetEmployeeFromId(int id)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
@@ -39,25 +84,6 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public static bool AddEmployee(Employee employee)
-        {
-            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
-            {
-                string insertQuery = "INSERT INTO Employees (FirstName, LastName, EmailAddress, PhoneNumber)" +
-                                     "VALUES (@FirstName, @LastName, @EmailAddress, @PhoneNumber);";
-
-                var result = connection.Execute(insertQuery,
-                    new
-                    {
-                        employee.FirstName,
-                        employee.LastName,
-                        employee.EmailAddress,
-                        employee.PhoneNumber
-                    });
-
-                return result != 0;
-            }
-        }
 
         public static bool ModifyEmployee(Employee employee)
         {
