@@ -99,18 +99,26 @@
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\AssignedShift.cs" />
     <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
+    <Compile Include="ViewModels\AddJobViewModel.cs" />
     <Compile Include="ViewModels\FirstChildViewModel.cs" />
     <Compile Include="ViewModels\ModifyEmployeeViewModel.cs" />
+    <Compile Include="ViewModels\ModifyJobViewModel.cs" />
     <Compile Include="ViewModels\SecondChildViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\AddEmployeeView.xaml.cs">
       <DependentUpon>AddEmployeeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddJobView.xaml.cs">
+      <DependentUpon>AddJobView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FirstChildView.xaml.cs">
       <DependentUpon>FirstChildView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ModifyEmployeeView.xaml.cs">
       <DependentUpon>ModifyEmployeeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModifyJobView.xaml.cs">
+      <DependentUpon>ModifyJobView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SecondChildView.xaml.cs">
       <DependentUpon>SecondChildView.xaml</DependentUpon>
@@ -153,11 +161,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddJobView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FirstChildView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ModifyEmployeeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModifyJobView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
