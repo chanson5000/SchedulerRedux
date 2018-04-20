@@ -20,6 +20,7 @@ namespace ScheduleWhizRedux.ViewModels
         private Employee _selectedEmployee;
         private Job _selectedJob;
         private readonly AddEmployeeViewModel addEmployeeViewModel;
+        private ModifyEmployeeViewModel modifyEmployeeViewModel;
 
         private readonly IWindowManager windowManager;
         //private List<string> _availableJobs;
@@ -32,6 +33,7 @@ namespace ScheduleWhizRedux.ViewModels
             AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
             windowManager = new WindowManager();
             addEmployeeViewModel = new AddEmployeeViewModel();
+            modifyEmployeeViewModel = new ModifyEmployeeViewModel();
         }
 
         public BindableCollection<Job> AllJobs
@@ -106,8 +108,21 @@ namespace ScheduleWhizRedux.ViewModels
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
 
-            // Works automagically with clear text using Caliburn Micro.
+        public void ModifyEmployee()
+        {
+            if (SelectedEmployee == null) return;
+            modifyEmployeeViewModel.ModifyingEmployee = SelectedEmployee;
+            var result = windowManager.ShowDialog(modifyEmployeeViewModel);
+            if (result == true)
+            {
+                Employees = new BindableCollection<Employee>(DataAccess.GetAllEmployees());
+            }
+        }
+
+
+        // Works automagically with clear text using Caliburn Micro.
             // Its all about the naming conventions.
             // This code may be useful to have as a reference for later.
             //public bool CanClearText(string firstName, string lastName)
@@ -133,6 +148,6 @@ namespace ScheduleWhizRedux.ViewModels
             //        NotifyOfPropertyChange(() => PeopleFound);
             //    }
             //}
-        }
+        
     }
 }
