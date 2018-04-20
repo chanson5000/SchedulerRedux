@@ -56,6 +56,28 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
+        public static bool ModifyEmployee(Employee employee)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                string insertQuery =
+                    "update Employees set FirstName = @FirstName, LastName = @LastName, EmailAddress = @EmailAddress, PhoneNumber = @PhoneNumber where Id = @Id;";
+
+                var result = connection.Execute(insertQuery, 
+                    new
+                    {
+                        employee.FirstName,
+                        employee.LastName,
+                        employee.EmailAddress,
+                        employee.PhoneNumber,
+                        employee.Id
+                    });
+
+                if (result == 0) return false;
+                return true;
+            }
+        }
+
         public static bool RemoveEmployee(Employee employee)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
