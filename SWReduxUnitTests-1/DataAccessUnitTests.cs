@@ -122,5 +122,26 @@ namespace SWReduxUnitTests_1
             Assert.Equal(employeeTestCase.EmailAddress, modifiedFromDatabase.EmailAddress);
             Assert.Equal(employeeTestCase.PhoneNumber, modifiedFromDatabase.PhoneNumber);
         }
+
+        [Fact]
+        public void AddJob()
+        {
+            Job newTestJob = new Job()
+            {
+                Title = "Add Job Test"
+            };
+
+            var result = DataAccess.AddJob(newTestJob.Title);
+
+            newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.Title);
+
+            List<Job> allJobs = DataAccess.GetAllJobs();
+
+            DataAccess.RemoveJob(newTestJob);
+
+            Assert.True(result);
+            // Why does this Assert not work like I think it should.
+            Assert.DoesNotContain(newTestJob, allJobs);
+        }
     }
 }
