@@ -76,7 +76,7 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void Cancel()
         {
-            this.TryClose();
+            TryClose();
         }
     }
 

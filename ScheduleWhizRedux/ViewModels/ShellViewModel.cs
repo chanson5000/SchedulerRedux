@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using ScheduleWhizRedux.Helpers;
@@ -19,6 +20,8 @@ namespace ScheduleWhizRedux.ViewModels
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
         private Job _selectedJob;
+        private string _selectedAssignedJob;
+        private string _selectedAvailableJob;
         private readonly AddEmployeeViewModel addEmployeeViewModel;
         private readonly ModifyEmployeeViewModel modifyEmployeeViewModel;
         private readonly AddJobViewModel addJobViewModel;
@@ -28,7 +31,7 @@ namespace ScheduleWhizRedux.ViewModels
         public ShellViewModel()
         {
             Employees = new BindableCollection<Employee>(DataAccess.GetAllEmployees());
-            AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+            AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobRecords());
             windowManager = new WindowManager();
             addEmployeeViewModel = new AddEmployeeViewModel();
             modifyEmployeeViewModel = new ModifyEmployeeViewModel();
@@ -53,6 +56,26 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 _employees = value;
                 NotifyOfPropertyChange(() => Employees);
+            }
+        }
+
+        public string SelectedAssignedJob
+        {
+            get { return _selectedAssignedJob; }
+            set
+            {
+                _selectedAssignedJob = value;
+                NotifyOfPropertyChange(() => SelectedAssignedJob);
+            }
+        }
+
+        public string SelectedAvailableJob
+        {
+            get { return _selectedAvailableJob; }
+            set
+            {
+                _selectedAvailableJob = value;
+                NotifyOfPropertyChange(() => SelectedAvailableJob);
             }
         }
 
@@ -130,7 +153,8 @@ namespace ScheduleWhizRedux.ViewModels
             var result = windowManager.ShowDialog(addJobViewModel);
             if (result == true)
             {
-                AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+                AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobRecords());
+                NotifyOfPropertyChange(() => SelectedEmployee);
             }
         }
 
@@ -139,10 +163,9 @@ namespace ScheduleWhizRedux.ViewModels
             if (SelectedJob == null) return;
             modifyJobViewModel.ModifiedJob = SelectedJob.Title;
             var result = windowManager.ShowDialog(modifyJobViewModel);
-            if (result == true)
-            {
-                AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
-            }
+            if (result != true) return;
+            AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobRecords());
+            NotifyOfPropertyChange(() => SelectedEmployee);
         }
 
         public void RemoveJob()
@@ -157,7 +180,8 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 if (DataAccess.RemoveJob(SelectedJob))
                 {
-                    AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobs());
+                    AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobRecords());
+                    NotifyOfPropertyChange(() => SelectedEmployee);
                     MessageBox.Show("The the job was removed from the database.", "Operation Successful",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -166,6 +190,56 @@ namespace ScheduleWhizRedux.ViewModels
                     MessageBox.Show("Unable to remove the employee from the database.", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        public void SwapJobAssignment()
+        {
+            if (SelectedAssignedJob != null)
+            {
+                var jobToUnAssign = DataAccess.GetJobRecordFromTitle(SelectedAssignedJob);
+
+                if (DataAccess.UnAssignJobFromEmployee(jobToUnAssign, SelectedEmployee))
+                {
+                    MessageBox.Show(
+                        $"The job, {jobToUnAssign.Title}, was unassigned from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        "Operation Successful",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    NotifyOfPropertyChange(() => SelectedEmployee);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Unable to unassign the job, {SelectedAssignedJob} from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else if (SelectedAvailableJob != null)
+            {
+                var jobToAssign = DataAccess.GetJobRecordFromTitle(SelectedAvailableJob);
+
+                if (DataAccess.AssignJobToEmployee(jobToAssign, SelectedEmployee))
+                {
+                    MessageBox.Show(
+                        $"The job, {jobToAssign.Title}, was assigned to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        "Operation Successful",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    NotifyOfPropertyChange(() => SelectedEmployee);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Unable to assign the job, {SelectedAvailableJob}, to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            else
+            {
+                MessageBox.Show("You must select an employee and a job to assign or unassign.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

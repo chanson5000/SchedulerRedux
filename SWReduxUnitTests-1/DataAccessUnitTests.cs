@@ -122,5 +122,57 @@ namespace SWReduxUnitTests_1
             Assert.Equal(employeeTestCase.EmailAddress, modifiedFromDatabase.EmailAddress);
             Assert.Equal(employeeTestCase.PhoneNumber, modifiedFromDatabase.PhoneNumber);
         }
+
+        [Fact]
+        public void AddJob_ShouldReturnTrue()
+        {
+            Job newTestJob = new Job()
+            {
+                Title = "Add Job Test"
+            };
+
+            var result = DataAccess.AddJob(newTestJob.Title);
+
+            newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.Title);
+
+            List<Job> allJobs = DataAccess.GetAllJobRecords();
+
+            DataAccess.RemoveJob(newTestJob);
+
+            Assert.True(result);
+            // TODO: Why does this Assert not work like I think it should.
+            Assert.DoesNotContain(newTestJob, allJobs);
+        }
+
+        [Fact]
+        public void AssignJobToEmployee_ShouldReturnTrue()
+        {
+            Job newTestJobToAssign = new Job()
+            {
+                Title = "AssignJobTest"
+            };
+
+            Employee newTestAssignJobEmployee = new Employee()
+            {
+                FirstName = "TAJFirstName",
+                LastName = "TAJLastName",
+                EmailAddress = "TAJEmailAddress",
+                PhoneNumber = "TAJPhoneNumber"
+            };
+
+            DataAccess.AddJob(newTestJobToAssign.Title);
+            DataAccess.AddEmployee(newTestAssignJobEmployee);
+
+            newTestJobToAssign.Id = DataAccess.GetJobIdFromTitle(newTestJobToAssign.Title);
+
+            newTestAssignJobEmployee.Id = DataAccess.GetIdFromEmployee(newTestAssignJobEmployee);
+
+            var result = DataAccess.AssignJobToEmployee(newTestJobToAssign, newTestAssignJobEmployee);
+
+            DataAccess.RemoveJob(newTestJobToAssign);
+            DataAccess.RemoveEmployee(newTestAssignJobEmployee);
+
+            Assert.True(result);
+        }   
     }
 }
