@@ -56,7 +56,7 @@
                 <!-- Row 5 -->
                 <TextBlock Text="Assigned" Grid.Row="5" Grid.Column="2" TextAlignment="Center" Margin="0, 5, 0, 0"
                    VerticalAlignment="Center" />
-                <Button Content="Swap Job" Grid.Row="5" Grid.Column="3" Margin="0, 5, 0, 0" />
+                <Button x:Name="SwapJobAssignment" Content="Swap Job" Grid.Row="5" Grid.Column="3" Margin="0, 5, 0, 0" />
                 <TextBlock Text="Available" Grid.Row="5" Grid.Column="4" TextAlignment="Center" Margin="0, 5, 0 ,0"
                    VerticalAlignment="Center" />
                 <!-- Row 6 -->
@@ -70,10 +70,10 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="SelectedEmployee_AssignedJobs"
-                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"></ListBox>
-                    <ListBox x:Name="SelectedEmployee_AvailableJobs"
-                             Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5"></ListBox>
+                    <ListBox x:Name="SelectedEmployee_AssignedJobs" SelectedItem="{Binding Path=SelectedAssignedJob, Mode=OneWayToSource}"
+                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5" GotFocus="SelectedEmployee_AssignedJobs_GotFocus"></ListBox>
+                    <ListBox x:Name="SelectedEmployee_AvailableJobs" SelectedItem="{Binding Path=SelectedAvailableJob, Mode=OneWayToSource}"
+                             Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5" GotFocus="SelectedEmployee_AvailableJobs_GotFocus"></ListBox>
                 </Grid>
                 <!-- Some code I might want to use later -->
                 <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
