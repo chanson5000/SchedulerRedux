@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ScheduleWhizRedux.Helpers;
 
 namespace ScheduleWhizRedux.Views
 {
@@ -22,6 +23,16 @@ namespace ScheduleWhizRedux.Views
         public ShellView()
         {
             InitializeComponent();
+        }
+
+        private void SelectedEmployee_AssignedJobs_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SelectedEmployee_AvailableJobs.UnselectAll();
+        }
+
+        private void SelectedEmployee_AvailableJobs_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SelectedEmployee_AssignedJobs.UnselectAll();
         }
     }
 }
