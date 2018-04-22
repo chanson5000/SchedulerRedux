@@ -242,35 +242,5 @@ namespace ScheduleWhizRedux.ViewModels
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
-
-
-        // Works automagically with clear text using Caliburn Micro.
-        // Its all about the naming conventions.
-        // This code may be useful to have as a reference for later.
-        //public bool CanClearText(string firstName, string lastName)
-        //{
-        //    return !String.IsNullOrWhiteSpace(firstName) || !String.IsNullOrWhiteSpace(lastName);
-        //}   
-
-        //public void LoadPageOne()
-        //{
-        //    ActivateItem(new FirstChildViewModel());
-        //}
-
-        //public void LoadPageTwo()
-        //{
-        //    ActivateItem(new SecondChildViewModel());
-        //}
-        //public BindableCollection<Employee> PeopleFound
-        //{
-        //    get { return _peopleFound; }
-        //    set
-        //    {
-        //        _peopleFound = value;
-        //        NotifyOfPropertyChange(() => PeopleFound);
-        //    }
-        //}
-
     }
 }
