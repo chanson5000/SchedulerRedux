@@ -37,7 +37,7 @@
         <!-- Row 4 -->
         <Button x:Name="AddJob" Grid.Row="4" Grid.Column="1"
                 Content="Add" Width="75" FontSize="18" Margin="5" />
-        <Button x:Name="CancelButton" Grid.Row="4" Grid.Column="2"
+        <Button x:Name="Cancel" Grid.Row="4" Grid.Column="2"
                 Content="Cancel" Width="75" FontSize="18" Margin="5" />
     </Grid>
 </Window>
