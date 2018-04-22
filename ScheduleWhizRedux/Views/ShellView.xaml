@@ -75,12 +75,6 @@
                     <ListBox x:Name="SelectedEmployee_AvailableJobs" SelectedItem="{Binding Path=SelectedAvailableJob, Mode=OneWayToSource}"
                              Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5" GotFocus="SelectedEmployee_AvailableJobs_GotFocus"></ListBox>
                 </Grid>
-                <!-- Some code I might want to use later -->
-                <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
-                <Button x:Name="LoadPageTwo" Grid.Row="6" Grid.Column="2">Load Second Page</Button>-->
-                <!--<Button Grid.Row="6" Grid.Column="3" x:Name="SearchPeople">Search</Button>-->
-                <!--<ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
-                        x:Name="ActiveItem" />-->
             </Grid>
         </TabItem>
         <!-- Tab 2 - Modify Jobs -->
