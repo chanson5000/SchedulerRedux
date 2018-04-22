@@ -124,7 +124,7 @@ namespace SWReduxUnitTests_1
         }
 
         [Fact]
-        public void AddJob()
+        public void AddJob_ShouldReturnTrue()
         {
             Job newTestJob = new Job()
             {
@@ -135,7 +135,7 @@ namespace SWReduxUnitTests_1
 
             newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.Title);
 
-            List<Job> allJobs = DataAccess.GetAllJobs();
+            List<Job> allJobs = DataAccess.GetAllJobRecords();
 
             DataAccess.RemoveJob(newTestJob);
 
@@ -143,5 +143,36 @@ namespace SWReduxUnitTests_1
             // TODO: Why does this Assert not work like I think it should.
             Assert.DoesNotContain(newTestJob, allJobs);
         }
+
+        [Fact]
+        public void AssignJobToEmployee_ShouldReturnTrue()
+        {
+            Job newTestJobToAssign = new Job()
+            {
+                Title = "AssignJobTest"
+            };
+
+            Employee newTestAssignJobEmployee = new Employee()
+            {
+                FirstName = "TAJFirstName",
+                LastName = "TAJLastName",
+                EmailAddress = "TAJEmailAddress",
+                PhoneNumber = "TAJPhoneNumber"
+            };
+
+            DataAccess.AddJob(newTestJobToAssign.Title);
+            DataAccess.AddEmployee(newTestAssignJobEmployee);
+
+            newTestJobToAssign.Id = DataAccess.GetJobIdFromTitle(newTestJobToAssign.Title);
+
+            newTestAssignJobEmployee.Id = DataAccess.GetIdFromEmployee(newTestAssignJobEmployee);
+
+            var result = DataAccess.AssignJobToEmployee(newTestJobToAssign, newTestAssignJobEmployee);
+
+            DataAccess.RemoveJob(newTestJobToAssign);
+            DataAccess.RemoveEmployee(newTestAssignJobEmployee);
+
+            Assert.True(result);
+        }   
     }
 }
