@@ -27,6 +27,20 @@ namespace ScheduleWhizRedux.ViewModels
         private readonly AddJobViewModel addJobViewModel;
         private readonly ModifyJobViewModel modifyJobViewModel;
         private readonly IWindowManager windowManager;
+        private string _sunSelectedJob;
+        private string _monSelectedJob;
+        private string _tueSelectedJob;
+        private string _wedSelectedJob;
+        private string _thuSelectedJob;
+        private string _friSelectedJob;
+        private string _satSelectedJob;
+        private string _sunSelectedShift;
+        private string _monSelectedShift;
+        private string _tueSelectedShift;
+        private string _wedSelectedShit;
+        private string _thuSelectedShift;
+        private string _friSelectedShift;
+        private string _satSelectedShift;
 
         public ShellViewModel()
         {
@@ -76,6 +90,146 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 _selectedAvailableJob = value;
                 NotifyOfPropertyChange(() => SelectedAvailableJob);
+            }
+        }
+
+        public string SunSelectedJob
+        {
+            get { return _sunSelectedJob; }
+            set
+            {
+                _sunSelectedJob = value;
+                NotifyOfPropertyChange(() => SunSelectedJob);
+            }
+        }
+
+        public string MonSelectedJob
+        {
+            get { return _monSelectedJob; }
+            set
+            {
+                _monSelectedJob = value;
+                NotifyOfPropertyChange(() => MonSelectedJob);
+            }
+        }
+
+        public string TueSelectedJob
+        {
+            get { return _tueSelectedJob; }
+            set
+            {
+                _tueSelectedJob = value;
+                NotifyOfPropertyChange(() => TueSelectedJob);
+            }
+        }
+
+        public string WedSelectedJob
+        {
+            get { return _wedSelectedJob; }
+            set
+            {
+                _wedSelectedJob = value;
+                NotifyOfPropertyChange(() => WedSelectedJob);
+            }
+        }
+
+        public string ThuSelectedJob
+        {
+            get { return _thuSelectedJob; }
+            set
+            {
+                _thuSelectedJob = value;
+                NotifyOfPropertyChange(() => ThuSelectedJob);
+            }
+        }
+
+        public string FriSelectedJob
+        {
+            get { return _friSelectedJob; }
+            set
+            {
+                _friSelectedJob = value;
+                NotifyOfPropertyChange(() => FriSelectedJob);
+            }
+        }
+
+        public string SatSelectedJob
+        {
+            get { return _satSelectedJob; }
+            set
+            {
+                _satSelectedJob = value;
+                NotifyOfPropertyChange(() => SatSelectedJob);
+            }
+        }
+
+        public string SunSelectedShift
+        {
+            get { return _sunSelectedShift; }
+            set
+            {
+                _sunSelectedShift = value;
+                NotifyOfPropertyChange(() => SunSelectedShift);
+            }
+        }
+
+        public string MonSelectedShift
+        {
+            get { return _monSelectedShift; }
+            set
+            {
+                _monSelectedShift = value;
+                NotifyOfPropertyChange(() => MonSelectedShift);
+            }
+        }
+
+        public string TueSelectedShift
+        {
+            get { return _tueSelectedShift; }
+            set
+            {
+                _tueSelectedShift = value;
+                NotifyOfPropertyChange(() => TueSelectedShift);
+            }
+        }
+
+        public string WedSelectedShift
+        {
+            get { return _wedSelectedShit; }
+            set
+            {
+                _wedSelectedShit = value;
+                NotifyOfPropertyChange(() => WedSelectedShift);
+            }
+        }
+
+        public string ThuSelectedShift
+        {
+            get { return _thuSelectedShift; }
+            set
+            {
+                _thuSelectedShift = value;
+                NotifyOfPropertyChange(() => ThuSelectedShift);
+            }
+        }
+
+        public string FriSelectedShift
+        {
+            get { return _friSelectedShift; }
+            set
+            {
+                _friSelectedShift = value;
+                NotifyOfPropertyChange(() => FriSelectedShift);
+            }
+        }
+
+        public string SatSelectedShift
+        {
+            get { return _satSelectedShift; }
+            set
+            {
+                _satSelectedShift = value;
+                NotifyOfPropertyChange(() => SatSelectedShift);
             }
         }
 
