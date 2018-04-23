@@ -7,16 +7,17 @@ using ScheduleWhizRedux.Helpers;
 
 namespace ScheduleWhizRedux.Models
 {
-    public class AssignedShift
+    public class AssignedShift : IShift, IJob, INumAvailable
     {
-        public DayOfWeek Day { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
         public string ShiftName { get; set; }
         public int NumAvailable { get; set; }
         public int JobId { get; set; }
 
         public string JobTitle
         {
-            get { return DataAccess.GetJobFromId(JobId).Title; }
+            get { return DataAccess.GetJobFromId(JobId).JobTitle; }
+            set { }
         }
     }
 }
