@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using ScheduleWhizRedux.Helpers;
 using ScheduleWhizRedux.Models;
+using DayOfWeek = System.DayOfWeek;
 
 namespace ScheduleWhizRedux.ViewModels
 {
@@ -20,27 +21,65 @@ namespace ScheduleWhizRedux.ViewModels
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
         private Job _selectedJob;
-        private string _selectedAssignedJob;
-        private string _selectedAvailableJob;
+        private IJob _selectedAssignedJob;
+        private IJob _selectedAvailableJob;
         private readonly AddEmployeeViewModel addEmployeeViewModel;
         private readonly ModifyEmployeeViewModel modifyEmployeeViewModel;
         private readonly AddJobViewModel addJobViewModel;
         private readonly ModifyJobViewModel modifyJobViewModel;
         private readonly IWindowManager windowManager;
-        private string _sunSelectedJob;
-        private string _monSelectedJob;
-        private string _tueSelectedJob;
-        private string _wedSelectedJob;
-        private string _thuSelectedJob;
-        private string _friSelectedJob;
-        private string _satSelectedJob;
-        private string _sunSelectedShift;
-        private string _monSelectedShift;
-        private string _tueSelectedShift;
-        private string _wedSelectedShit;
-        private string _thuSelectedShift;
-        private string _friSelectedShift;
-        private string _satSelectedShift;
+        private IJob _sunSelectedJob;
+        private IJob _monSelectedJob;
+        private IJob _tueSelectedJob;
+        private IJob _wedSelectedJob;
+        private IJob _thuSelectedJob;
+        private IJob _friSelectedJob;
+        private IJob _satSelectedJob;
+        private IShift _sunSelectedShift;
+        private IShift _monSelectedShift;
+        private IShift _tueSelectedShift;
+        private IShift _wedSelectedShift;
+        private IShift _thuSelectedShift;
+        private IShift _friSelectedShift;
+        private IShift _satSelectedShift;
+        private List<IShift> _sunShiftsAvailableForJob;
+        private List<IShift> _monShiftsAvailableForJob;
+        private List<IShift> _tueShiftsAvailableForJob;
+        private List<IShift> _wedShiftsAvailableForJob;
+        private List<IShift> _thuShiftsAvailableForJob;
+        private List<IShift> _friShiftsAvailableForJob;
+        private List<IShift> _satShiftsAvailableForJob;
+        private INumAvailable _sunNumShiftsAvailableForJob;
+        private INumAvailable _monNumShiftsAvailableForJob;
+        private INumAvailable _tueNumShiftsAvailableForJob;
+        private INumAvailable _wedNumShiftsAvailableForJob;
+        private INumAvailable _thuNumShiftsAvailableForJob;
+        private INumAvailable _friNumShiftsAvailableforJob;
+        private INumAvailable _satNumShiftsAvailableForJob;
+
+        public List<IShift> SunShiftsAvailableForJob
+        {
+            get { return DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob); }
+            set
+            {
+                _sunShiftsAvailableForJob = value;
+                NotifyOfPropertyChange(() => SunShiftsAvailableForJob);
+            }
+        }
+
+        public INumAvailable SunNumShiftsAvailableForJob
+        {
+            get
+            {
+                return DataAccess.GetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob, SunSelectedShift);
+            }
+            set
+            {
+                _sunNumShiftsAvailableForJob = value;
+                NotifyOfPropertyChange(() => SunNumShiftsAvailableForJob);
+            }
+        }
+
 
         public ShellViewModel()
         {
@@ -73,7 +112,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SelectedAssignedJob
+        public IJob SelectedAssignedJob
         {
             get { return _selectedAssignedJob; }
             set
@@ -83,7 +122,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SelectedAvailableJob
+        public IJob SelectedAvailableJob
         {
             get { return _selectedAvailableJob; }
             set
@@ -93,7 +132,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SunSelectedJob
+        public IJob SunSelectedJob
         {
             get { return _sunSelectedJob; }
             set
@@ -103,7 +142,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string MonSelectedJob
+        public IJob MonSelectedJob
         {
             get { return _monSelectedJob; }
             set
@@ -113,7 +152,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string TueSelectedJob
+        public IJob TueSelectedJob
         {
             get { return _tueSelectedJob; }
             set
@@ -123,7 +162,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string WedSelectedJob
+        public IJob WedSelectedJob
         {
             get { return _wedSelectedJob; }
             set
@@ -133,7 +172,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string ThuSelectedJob
+        public IJob ThuSelectedJob
         {
             get { return _thuSelectedJob; }
             set
@@ -143,7 +182,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string FriSelectedJob
+        public IJob FriSelectedJob
         {
             get { return _friSelectedJob; }
             set
@@ -153,7 +192,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SatSelectedJob
+        public IJob SatSelectedJob
         {
             get { return _satSelectedJob; }
             set
@@ -163,7 +202,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SunSelectedShift
+        public IShift SunSelectedShift
         {
             get { return _sunSelectedShift; }
             set
@@ -173,7 +212,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string MonSelectedShift
+        public IShift MonSelectedShift
         {
             get { return _monSelectedShift; }
             set
@@ -183,7 +222,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string TueSelectedShift
+        public IShift TueSelectedShift
         {
             get { return _tueSelectedShift; }
             set
@@ -193,17 +232,17 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string WedSelectedShift
+        public IShift WedSelectedShift
         {
-            get { return _wedSelectedShit; }
+            get { return _wedSelectedShift; }
             set
             {
-                _wedSelectedShit = value;
+                _wedSelectedShift = value;
                 NotifyOfPropertyChange(() => WedSelectedShift);
             }
         }
 
-        public string ThuSelectedShift
+        public IShift ThuSelectedShift
         {
             get { return _thuSelectedShift; }
             set
@@ -213,7 +252,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string FriSelectedShift
+        public IShift FriSelectedShift
         {
             get { return _friSelectedShift; }
             set
@@ -223,7 +262,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public string SatSelectedShift
+        public IShift SatSelectedShift
         {
             get { return _satSelectedShift; }
             set
@@ -315,7 +354,7 @@ namespace ScheduleWhizRedux.ViewModels
         public void ModifyJob()
         {
             if (SelectedJob == null) return;
-            modifyJobViewModel.ModifiedJob = SelectedJob.Title;
+            modifyJobViewModel.ModifiedJob = SelectedJob.JobTitle;
             var result = windowManager.ShowDialog(modifyJobViewModel);
             if (result != true) return;
             AllJobs = new BindableCollection<Job>(DataAccess.GetAllJobRecords());
@@ -356,7 +395,7 @@ namespace ScheduleWhizRedux.ViewModels
                 if (DataAccess.UnAssignJobFromEmployee(jobToUnAssign, SelectedEmployee))
                 {
                     MessageBox.Show(
-                        $"The job, {jobToUnAssign.Title}, was unassigned from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        $"The job, {jobToUnAssign.JobTitle}, was unassigned from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
                         "Operation Successful",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     NotifyOfPropertyChange(() => SelectedEmployee);
@@ -376,7 +415,7 @@ namespace ScheduleWhizRedux.ViewModels
                 if (DataAccess.AssignJobToEmployee(jobToAssign, SelectedEmployee))
                 {
                     MessageBox.Show(
-                        $"The job, {jobToAssign.Title}, was assigned to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                        $"The job, {jobToAssign.JobTitle}, was assigned to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
                         "Operation Successful",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     NotifyOfPropertyChange(() => SelectedEmployee);
