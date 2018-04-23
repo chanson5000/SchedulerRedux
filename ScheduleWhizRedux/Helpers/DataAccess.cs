@@ -159,7 +159,7 @@ namespace ScheduleWhizRedux.Helpers
             }
         }
 
-        public static Job GetJobRecordFromTitle(string jobTitle)
+        public static Job GetJobRecordFromTitle(IJob jobTitle)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
@@ -197,7 +197,7 @@ namespace ScheduleWhizRedux.Helpers
                     new
                     {
                         job.Id,
-                        job.Title
+                        job.JobTitle
                     });
 
                 return result != null;
@@ -207,7 +207,7 @@ namespace ScheduleWhizRedux.Helpers
         // Probably unecessary.
         public static bool JobExists(Job job)
         {
-            return JobExists(job.Title);
+            return JobExists(job.JobTitle);
         }
 
         public static List<Job> GetAllJobRecords()
@@ -232,7 +232,7 @@ namespace ScheduleWhizRedux.Helpers
 
                 foreach (var jobRecord in result)
                 {
-                    listResult.Add(jobRecord.Title);
+                    listResult.Add(jobRecord.JobTitle);
                 }
 
                 return listResult;
@@ -263,7 +263,7 @@ namespace ScheduleWhizRedux.Helpers
                 int result = connection.Execute(updateQuery,
                     new
                     {
-                        job.Title,
+                        job.JobTitle,
                         job.Id
                     });
 
@@ -307,7 +307,7 @@ namespace ScheduleWhizRedux.Helpers
                     {
                         if (assignedJobRecord.JobId == jobRecord.Id)
                         {
-                            result.Add(jobRecord.Title);
+                            result.Add(jobRecord.JobTitle);
                         }
                     }
                 }
@@ -337,7 +337,7 @@ namespace ScheduleWhizRedux.Helpers
 
         public static bool AssignJobToEmployee(Job job, Employee employee)
         {
-            if (IsJobAssignedToEmployee(job.Title, employee))
+            if (IsJobAssignedToEmployee(job.JobTitle, employee))
             {
                 return false;
             }
@@ -355,7 +355,7 @@ namespace ScheduleWhizRedux.Helpers
 
         public static bool UnAssignJobFromEmployee(Job job, Employee employee)
         {
-            if (!IsJobAssignedToEmployee(job.Title, employee))
+            if (!IsJobAssignedToEmployee(job.JobTitle, employee))
             {
                 return false;
             }
@@ -387,6 +387,86 @@ namespace ScheduleWhizRedux.Helpers
                     });
 
                 return result != null;
+            }
+        }
+
+        // Assigned Shifts Data Access
+        
+        // Add a new shift for a job on a certain day of the week.
+        public static bool AddShiftForJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName, int numAvailable = 0)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query =
+                    "insert into AssignedShifts (DayOfWeek, JobTitle, ShiftName, NumAvailable) values (@DayOfWeek, @JobTitle, @ShiftName, @NumAvailable);";
+
+                var result = connection.Execute(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobTitle = jobTitle,
+                        ShiftName = shiftName,
+                        NumAvailable = numAvailable
+                    });
+
+                return result != 0;
+            }
+        }
+
+        // Remove shift for a job on a certain day of the week.
+        public static bool RemoveShiftforJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query =
+                    "delete from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @Jobtitle and ShiftName = @ShiftName;";
+
+                var result = connection.Execute(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobTitle = jobTitle,
+                        ShiftName = shiftName
+                    });
+
+                return result != 0;
+            }
+        }
+
+
+        public static List<IShift> GetAvailableShiftsForJobOnDay(DayOfWeek day, IJob jobTitle)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query = "select ShiftName from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @JobTitle;";
+
+                var result = connection.Query<IShift>(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobTitle = jobTitle
+                    }).ToList();
+
+                return result;
+            }
+        }
+
+        public static INumAvailable GetNumAvailableShiftsForJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var query =
+                    "select NumAvailable from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @JobTitle and ShiftName = @ShiftName;";
+
+                var result = connection.QueryFirstOrDefault<INumAvailable>(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobTitle = jobTitle,
+                        ShiftName = shiftName
+                    });
+
+                return result;
             }
         }
     }
