@@ -471,7 +471,6 @@ namespace ScheduleWhizRedux.ViewModels
 
             addShiftViewModel.Day = DayOfWeek.Sunday;
             addShiftViewModel.Job = SunSelectedJob.JobTitle;
-            addShiftViewModel.NumAvailable = SunNumShiftsAvailableForJob;
 
             var result = windowManager.ShowDialog(addShiftViewModel);
             if (result != true) return;
