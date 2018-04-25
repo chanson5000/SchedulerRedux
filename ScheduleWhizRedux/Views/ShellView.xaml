@@ -196,16 +196,28 @@
                           SelectedItem="{Binding Path=SunSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="4" Text="MonSelShift"
+                          ItemsSource="{Binding MonShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=MonSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="5" Text="TueSelShift"
+                          ItemsSource="{Binding TueShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=TueSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="6" Text="WedSelShift"
+                          ItemsSource="{Binding WedShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=WedSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="7" Text="ThuSelShift"
+                          ItemsSource="{Binding ThuShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=ThuSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="8" Text="FriSelShift"
+                          ItemsSource="{Binding FriShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=FriSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="9" Text="SatSelShift"
+                          ItemsSource="{Binding SatShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=SatSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
 
                 <!-- Column 4 -->
@@ -214,53 +226,53 @@
                 <Button Grid.Column="4" Grid.Row="4" Margin="5"
                         x:Name="MonAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="5" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="TueAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="6" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="WedAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="7" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="ThuAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="8" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="FriAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="9" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="SatAddShift" Content="Add"></Button>
 
                 <!-- Column 5 -->
                 <Button Grid.Column="5" Grid.Row="3" Margin="5"
                         x:Name="SunRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="4" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="MonRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="5" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="TueRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="6" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="WedRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="7" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="ThuRemoveShift"  Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="8" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="FriRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="9" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="SatRemoveShift" Content="Remove"></Button>
 
                 <!-- Column 6 -->
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="3" Margin="10,0,10,5"
                                     Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0" Height="30" VerticalAlignment="Bottom"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="4" Margin="10,5,10,5" 
-                                    x:Name="SpinMonNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=MonNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="5" Margin="10,5,10,5" 
-                                    x:Name="SpinTueNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=TueNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="6" Margin="10,5,10,5" 
-                                    x:Name="SpinWedNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=WedNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="7" Margin="10,5,10,5" 
-                                    x:Name="SpinThuNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=ThuNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="8" Margin="10,5,10,5" 
-                                    x:Name="SpinFriNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=FriNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="9" Margin="10,5,10,5" 
-                                    x:Name="SpinSatNumAvailableShifts" Value="0" FormatString="N0"
+                                    Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
 
 
