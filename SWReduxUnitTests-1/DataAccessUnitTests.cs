@@ -128,12 +128,12 @@ namespace SWReduxUnitTests_1
         {
             Job newTestJob = new Job()
             {
-                Title = "Add Job Test"
+                JobTitle = "Add Job Test"
             };
 
-            var result = DataAccess.AddJob(newTestJob.Title);
+            var result = DataAccess.AddJob(newTestJob.JobTitle);
 
-            newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.Title);
+            newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.JobTitle);
 
             List<Job> allJobs = DataAccess.GetAllJobRecords();
 
@@ -149,7 +149,7 @@ namespace SWReduxUnitTests_1
         {
             Job newTestJobToAssign = new Job()
             {
-                Title = "AssignJobTest"
+                JobTitle = "AssignJobTest"
             };
 
             Employee newTestAssignJobEmployee = new Employee()
@@ -160,10 +160,10 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "TAJPhoneNumber"
             };
 
-            DataAccess.AddJob(newTestJobToAssign.Title);
+            DataAccess.AddJob(newTestJobToAssign.JobTitle);
             DataAccess.AddEmployee(newTestAssignJobEmployee);
 
-            newTestJobToAssign.Id = DataAccess.GetJobIdFromTitle(newTestJobToAssign.Title);
+            newTestJobToAssign.Id = DataAccess.GetJobIdFromTitle(newTestJobToAssign.JobTitle);
 
             newTestAssignJobEmployee.Id = DataAccess.GetIdFromEmployee(newTestAssignJobEmployee);
 
@@ -173,6 +173,68 @@ namespace SWReduxUnitTests_1
             DataAccess.RemoveEmployee(newTestAssignJobEmployee);
 
             Assert.True(result);
-        }   
+        }
+
+        [Fact]
+        public void AddShiftForJobOnDay_ReturnTrueIfSuccessful()
+        {
+            var jobTitle = "TestJobAssignment";
+            DataAccess.AddJob(jobTitle);
+            var dayOfWeek = DayOfWeek.Monday;
+            var shiftToAdd = "TestShiftAssignment";
+
+
+            var result = DataAccess.AddShiftForJobOnDay(dayOfWeek, jobTitle, shiftToAdd);
+
+            DataAccess.RemoveShiftForJobOnDay(dayOfWeek, jobTitle, shiftToAdd);
+
+            Job jobToRemove = new Job()
+            {
+                Id = DataAccess.GetJobIdFromTitle(jobTitle),
+                JobTitle = jobTitle
+            };
+
+            DataAccess.RemoveJob(jobToRemove);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void JobExists_ReturnTrueIfExists()
+        {
+            Job jobObjectToTestIfExists = new Job()
+            {
+                JobTitle = "jobToTestIfExists"
+            };
+
+            DataAccess.AddJob(jobObjectToTestIfExists.JobTitle);
+
+            var result = DataAccess.JobExists(jobObjectToTestIfExists);
+
+            DataAccess.RemoveJob(jobObjectToTestIfExists.JobTitle);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GetJobIdFromTitle_ReturnJobId()
+        {
+            Job testGetJobId = new Job()
+            {
+                JobTitle = "TestGetJobId"
+            };
+
+            DataAccess.AddJob(testGetJobId.JobTitle);
+            
+            testGetJobId.Id = DataAccess.GetJobIdFromTitle(testGetJobId.JobTitle);
+
+            var result = DataAccess.JobRecordExists(testGetJobId);
+
+            DataAccess.RemoveJob(testGetJobId);
+
+            Assert.True(result);
+        }
+
+        
     }
 }
