@@ -32,6 +32,7 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 MessageBox.Show($"The job, {NewJob}, was added to the database.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+                NewJob = "";
                 TryClose(true);
             }
             else
