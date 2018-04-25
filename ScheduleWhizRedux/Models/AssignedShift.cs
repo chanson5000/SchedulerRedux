@@ -16,7 +16,7 @@ namespace ScheduleWhizRedux.Models
 
         public string JobTitle
         {
-            get { return DataAccess.GetJobFromId(JobId).JobTitle; }
+            get => DataAccess.GetJobFromId(JobId).JobTitle;
             set { }
         }
     }

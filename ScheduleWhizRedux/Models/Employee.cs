@@ -15,29 +15,14 @@ namespace ScheduleWhizRedux.Models
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
 
-        public string FullName
-        {
-            get { return $"{FirstName} {LastName}"; }
-        }
+        public string FullName => $"{FirstName} {LastName}";
 
-        public string FullInfo
-        {
-            get { return $"{FirstName} {LastName} ({EmailAddress})"; }
-        }
+        public string FullInfo => $"{FirstName} {LastName} ({EmailAddress})";
 
-        public string Details
-        {
-            get { return $"{EmailAddress} - {PhoneNumber}"; }
-        }
+        public string Details => $"{EmailAddress} - {PhoneNumber}";
 
-        public List<string> AssignedJobs
-        {
-            get { return DataAccess.GetEmployeeAssignedJobs(Id);  }
-        }
+        public List<string> AssignedJobs => DataAccess.GetEmployeeAssignedJobs(Id);
 
-        public List<string> AvailableJobs
-        {
-            get { return DataAccess.GetEmployeeAvailableJobs(Id); }
-        }
+        public List<string> AvailableJobs => DataAccess.GetEmployeeAvailableJobs(Id);
     }
 }
