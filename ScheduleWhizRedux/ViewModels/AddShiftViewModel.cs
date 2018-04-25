@@ -20,10 +20,7 @@ namespace ScheduleWhizRedux.ViewModels
         public string NewShift
         {
             get { return _newShift; }
-            set
-            {
-                _newShift = value;
-            }
+            set { _newShift = value; }
         }
 
         public string Job
@@ -46,14 +43,14 @@ namespace ScheduleWhizRedux.ViewModels
     
         public void AddShift()
         {
-            if (NewShift.Trim() == "")
+            if (String.IsNullOrWhiteSpace(NewShift))
             {
                 MessageBox.Show("Please do not leave any fields blank.", "Input Error",
                     MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            if (DataAccess.AddShiftForJobOnDay(Day, Job, NewShift, NumAvailable))
+            if (DataAccess.AddShiftForJobOnDay(Day, Job, NewShift.Trim(), NumAvailable))
             {
                 MessageBox.Show($"The shift, {NewShift}, was added to the database.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
