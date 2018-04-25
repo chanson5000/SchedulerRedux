@@ -101,7 +101,7 @@
 
                 <!-- Row 1 -->
                 <ListBox x:Name="AllJobs" Grid.Row="1" Grid.Column="1" Grid.RowSpan="6"
-                         DisplayMemberPath="Title" Width="250" Margin="5"
+                         DisplayMemberPath="JobTitle" Width="250" Margin="5"
                          SelectedItem="{Binding Path=SelectedJob, Mode=OneWayToSource}" />
 
                 <Button x:Name="AddJob" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
@@ -114,7 +114,7 @@
                            FontSize="48" FontWeight="Bold" />
 
                 <!-- Row 3 -->
-                <TextBlock x:Name="SelectedJob_Title" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                <TextBlock x:Name="SelectedJob_JobTitle" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
                            TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
             </Grid>
         </TabItem>
@@ -169,29 +169,31 @@
 
                 <!-- Column 2 -->
                 <ComboBox Grid.Column="2" Grid.Row="3" Text="SunSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=SunSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="4" Text="MonSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=MonSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="5" Text="TueSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=TueSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="6" Text="WedSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=WedSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="7" Text="ThuSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=ThuSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="8" Text="FriSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=FriSelectedJob, Mode=OneWayToSource}"/>
                 <ComboBox Grid.Column="2" Grid.Row="9" Text="SatSelJob"
-                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="Title" Margin="5"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
                           SelectedItem="{Binding Path=SatSelectedJob, Mode=OneWayToSource}"/>
 
                 <!-- Column 3 -->
                 <ComboBox Grid.Column="3" Grid.Row="3" Text="SunSelShift"
+                          ItemsSource="{Binding SunShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=SunSelectedShift, Mode=OneWayToSource}"
                           Margin="5" />
                 <ComboBox Grid.Column="3" Grid.Row="4" Text="MonSelShift"
                           Margin="5" />
@@ -208,9 +210,9 @@
 
                 <!-- Column 4 -->
                 <Button Grid.Column="4" Grid.Row="3" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="SunAddShift"  Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="4" Margin="5"
-                        Content="Add"></Button>
+                        x:Name="MonAddShift" Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="5" Margin="5"
                         Content="Add"></Button>
                 <Button Grid.Column="4" Grid.Row="6" Margin="5"
@@ -224,7 +226,7 @@
 
                 <!-- Column 5 -->
                 <Button Grid.Column="5" Grid.Row="3" Margin="5"
-                        Content="Remove"></Button>
+                        x:Name="SunRemoveShift" Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="4" Margin="5"
                         Content="Remove"></Button>
                 <Button Grid.Column="5" Grid.Row="5" Margin="5"
@@ -239,9 +241,9 @@
                         Content="Remove"></Button>
 
                 <!-- Column 6 -->
-                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="3" Margin="10,5,10,5" 
-                                    x:Name="SpinSunNumAvailableShifts" Value="0" FormatString="N0"
-                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="3" Margin="10,0,10,5"
+                                    Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0" Height="30" VerticalAlignment="Bottom"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="4" Margin="10,5,10,5" 
                                     x:Name="SpinMonNumAvailableShifts" Value="0" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
