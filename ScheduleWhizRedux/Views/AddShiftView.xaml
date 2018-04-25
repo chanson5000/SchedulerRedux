@@ -3,13 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xwpf="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Title="Schedule Whiz - Add Shift" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
@@ -24,22 +26,29 @@
         </Grid.RowDefinitions>
         
         <!-- Row 1 -->
-        <TextBlock Text="Add New Shift" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+        <TextBlock Text="Add New Shift" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                    TextAlignment="Center" HorizontalAlignment="Center" FontSize="28" FontWeight="Bold"/>
 
         <!-- Row 2 -->
         <TextBlock Text="Name" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                    TextAlignment="Center" VerticalAlignment="Center" FontSize="16" />
+        <TextBlock Text="# Available" Grid.Row="2" Grid.Column="3" 
+                   TextAlignment="Center" VerticalAlignment="Center" FontSize="16" />
         
         <!-- Row 3 -->
         <TextBox x:Name="NewShift" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
                  VerticalAlignment="Center" Margin="5" MaxLength="25" Height="25" />
-        
+        <xwpf:IntegerUpDown Grid.Column="3" Grid.Row="3" Margin="5,5,5,5"
+                            Value="{Binding Path=NumAvailable, Mode=TwoWay}" FormatString="N0"
+                            AllowTextInput="False" Increment="1" Maximum="15" Minimum="0" Height="25" VerticalAlignment="Bottom"/>
+
         <!-- Row 4 -->
-        <Button x:Name="AddShift" Grid.Row="4" Grid.Column="1"
+        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Button x:Name="AddShift"
                 Content="Add" Width="75" FontSize="18" Margin="5" />
-        <Button x:Name="Cancel" Grid.Row="4" Grid.Column="2"
+        <Button x:Name="Cancel"
                 Content="Cancel" Width="75" FontSize="18" Margin="5" />
+        </StackPanel>
 
     </Grid>
 </Window>
