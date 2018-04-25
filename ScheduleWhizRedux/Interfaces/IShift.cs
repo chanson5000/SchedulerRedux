@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Caliburn.Micro;
 
-namespace ScheduleWhizRedux.ViewModels
+namespace ScheduleWhizRedux.Interfaces
 {
-    public class FirstChildViewModel : Screen
+    public interface IShift
     {
+        string ShiftName { get; set; }
     }
 }

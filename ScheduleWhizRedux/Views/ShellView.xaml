@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleWhizRedux.Views"
+        xmlns:xwpf="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d" FontSize="18"
-        Title="ShellView" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
+        Title="Schedule Whiz" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
     <TabControl>
         <!-- Tab 1 - Modify Employees -->
         <TabItem Header="Modify Employees">
@@ -75,12 +76,6 @@
                     <ListBox x:Name="SelectedEmployee_AvailableJobs" SelectedItem="{Binding Path=SelectedAvailableJob, Mode=OneWayToSource}"
                              Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="5" GotFocus="SelectedEmployee_AvailableJobs_GotFocus"></ListBox>
                 </Grid>
-                <!-- Some code I might want to use later -->
-                <!--<Button x:Name="LoadPageOne" Grid.Row="6" Grid.Column="1">Load First Page</Button>
-                <Button x:Name="LoadPageTwo" Grid.Row="6" Grid.Column="2">Load Second Page</Button>-->
-                <!--<Button Grid.Row="6" Grid.Column="3" x:Name="SearchPeople">Search</Button>-->
-                <!--<ContentControl Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"
-                        x:Name="ActiveItem" />-->
             </Grid>
         </TabItem>
         <!-- Tab 2 - Modify Jobs -->
@@ -106,7 +101,7 @@
 
                 <!-- Row 1 -->
                 <ListBox x:Name="AllJobs" Grid.Row="1" Grid.Column="1" Grid.RowSpan="6"
-                         DisplayMemberPath="Title" Width="250" Margin="5"
+                         DisplayMemberPath="JobTitle" Width="250" Margin="5"
                          SelectedItem="{Binding Path=SelectedJob, Mode=OneWayToSource}" />
 
                 <Button x:Name="AddJob" Content="Add" Grid.Row="1" Grid.Column="2" Margin="5" />
@@ -117,13 +112,13 @@
                 <TextBlock Text="Jobs" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
                            TextAlignment="Center" HorizontalAlignment="Center" MinWidth="400"
                            FontSize="48" FontWeight="Bold" />
-                
+
                 <!-- Row 3 -->
-                <TextBlock x:Name="SelectedJob_Title" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                <TextBlock x:Name="SelectedJob_JobTitle" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
                            TextAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="5, 5, 5, 0" />
             </Grid>
         </TabItem>
-        
+        <!-- Tab 3 - Modify Shifts -->
         <TabItem Header="Modify Shifts">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -132,7 +127,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="20" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -142,11 +138,143 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="20" />
                 </Grid.RowDefinitions>
+
+                <!-- Row 1 -->
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Job/Shift Availability" Grid.ColumnSpan="6"
+                           FontSize="48" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center"/>
+
+                <!-- Row 2 -->
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Selected Job"/>
+                <TextBlock Grid.Row="2" Grid.Column="3" Text="Selected Shift"/>
+                <TextBlock Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" TextAlignment="Center"
+                           Text="Modify Shift"/>
+                <TextBlock Grid.Row="2" Grid.Column="6" Text="# Available"/>
+
+                <!-- Column 1 -->
+                <TextBlock Grid.Column="1" Grid.Row="3" Text="Sun" />
+                <TextBlock Grid.Column="1" Grid.Row="4" Text="Mon" />
+                <TextBlock Grid.Column="1" Grid.Row="5" Text="Tue" />
+                <TextBlock Grid.Column="1" Grid.Row="6" Text="Wed" />
+                <TextBlock Grid.Column="1" Grid.Row="7" Text="Thu" />
+                <TextBlock Grid.Column="1" Grid.Row="8" Text="Fri" />
+                <TextBlock Grid.Column="1" Grid.Row="9" Text="Sat" />
+
+
+
+                <!-- Column 2 -->
+                <ComboBox Grid.Column="2" Grid.Row="3" Text="SunSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=SunSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="4" Text="MonSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=MonSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="5" Text="TueSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=TueSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="6" Text="WedSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=WedSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="7" Text="ThuSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=ThuSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="8" Text="FriSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=FriSelectedJob, Mode=OneWayToSource}"/>
+                <ComboBox Grid.Column="2" Grid.Row="9" Text="SatSelJob"
+                          ItemsSource="{Binding AllJobs}" DisplayMemberPath="JobTitle" Margin="5"
+                          SelectedItem="{Binding Path=SatSelectedJob, Mode=OneWayToSource}"/>
+
+                <!-- Column 3 -->
+                <ComboBox Grid.Column="3" Grid.Row="3" Text="SunSelShift"
+                          ItemsSource="{Binding SunShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=SunSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="4" Text="MonSelShift"
+                          ItemsSource="{Binding MonShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=MonSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="5" Text="TueSelShift"
+                          ItemsSource="{Binding TueShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=TueSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="6" Text="WedSelShift"
+                          ItemsSource="{Binding WedShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=WedSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="7" Text="ThuSelShift"
+                          ItemsSource="{Binding ThuShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=ThuSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="8" Text="FriSelShift"
+                          ItemsSource="{Binding FriShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=FriSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+                <ComboBox Grid.Column="3" Grid.Row="9" Text="SatSelShift"
+                          ItemsSource="{Binding SatShiftsAvailableForJob}"
+                          SelectedItem="{Binding Path=SatSelectedShift, Mode=OneWayToSource}"
+                          Margin="5" />
+
+                <!-- Column 4 -->
+                <Button Grid.Column="4" Grid.Row="3" Margin="5"
+                        x:Name="SunAddShift"  Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="4" Margin="5"
+                        x:Name="MonAddShift" Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="5" Margin="5"
+                        x:Name="TueAddShift" Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="6" Margin="5"
+                        x:Name="WedAddShift" Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="7" Margin="5"
+                        x:Name="ThuAddShift" Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="8" Margin="5"
+                        x:Name="FriAddShift" Content="Add"></Button>
+                <Button Grid.Column="4" Grid.Row="9" Margin="5"
+                        x:Name="SatAddShift" Content="Add"></Button>
+
+                <!-- Column 5 -->
+                <Button Grid.Column="5" Grid.Row="3" Margin="5"
+                        x:Name="SunRemoveShift" Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="4" Margin="5"
+                        x:Name="MonRemoveShift" Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="5" Margin="5"
+                        x:Name="TueRemoveShift" Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="6" Margin="5"
+                        x:Name="WedRemoveShift" Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="7" Margin="5"
+                        x:Name="ThuRemoveShift"  Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="8" Margin="5"
+                        x:Name="FriRemoveShift" Content="Remove"></Button>
+                <Button Grid.Column="5" Grid.Row="9" Margin="5"
+                        x:Name="SatRemoveShift" Content="Remove"></Button>
+
+                <!-- Column 6 -->
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="3" Margin="10,0,10,5"
+                                    Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0" Height="30" VerticalAlignment="Bottom"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="4" Margin="10,5,10,5" 
+                                    Value="{Binding Path=MonNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="5" Margin="10,5,10,5" 
+                                    Value="{Binding Path=TueNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="6" Margin="10,5,10,5" 
+                                    Value="{Binding Path=WedNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="7" Margin="10,5,10,5" 
+                                    Value="{Binding Path=ThuNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="8" Margin="10,5,10,5" 
+                                    Value="{Binding Path=FriNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+                <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="9" Margin="10,5,10,5" 
+                                    Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
+
 
             </Grid>
         </TabItem>
