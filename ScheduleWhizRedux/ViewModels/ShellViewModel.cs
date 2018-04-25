@@ -21,65 +21,109 @@ namespace ScheduleWhizRedux.ViewModels
         private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
         private Employee _selectedEmployee;
         private Job _selectedJob;
-        private IJob _selectedAssignedJob;
-        private IJob _selectedAvailableJob;
+        private string _selectedAssignedJob;
+        private string _selectedAvailableJob;
         private readonly AddEmployeeViewModel addEmployeeViewModel;
         private readonly ModifyEmployeeViewModel modifyEmployeeViewModel;
         private readonly AddJobViewModel addJobViewModel;
         private readonly ModifyJobViewModel modifyJobViewModel;
+        private readonly AddShiftViewModel addShiftViewModel;
         private readonly IWindowManager windowManager;
-        private IJob _sunSelectedJob;
-        private IJob _monSelectedJob;
-        private IJob _tueSelectedJob;
-        private IJob _wedSelectedJob;
-        private IJob _thuSelectedJob;
-        private IJob _friSelectedJob;
-        private IJob _satSelectedJob;
-        private IShift _sunSelectedShift;
-        private IShift _monSelectedShift;
-        private IShift _tueSelectedShift;
-        private IShift _wedSelectedShift;
-        private IShift _thuSelectedShift;
-        private IShift _friSelectedShift;
-        private IShift _satSelectedShift;
-        private List<IShift> _sunShiftsAvailableForJob;
-        private List<IShift> _monShiftsAvailableForJob;
-        private List<IShift> _tueShiftsAvailableForJob;
-        private List<IShift> _wedShiftsAvailableForJob;
-        private List<IShift> _thuShiftsAvailableForJob;
-        private List<IShift> _friShiftsAvailableForJob;
-        private List<IShift> _satShiftsAvailableForJob;
-        private INumAvailable _sunNumShiftsAvailableForJob;
-        private INumAvailable _monNumShiftsAvailableForJob;
-        private INumAvailable _tueNumShiftsAvailableForJob;
-        private INumAvailable _wedNumShiftsAvailableForJob;
-        private INumAvailable _thuNumShiftsAvailableForJob;
-        private INumAvailable _friNumShiftsAvailableforJob;
-        private INumAvailable _satNumShiftsAvailableForJob;
+        private Job _sunSelectedJob;
+        private string _monSelectedJob;
+        private string _tueSelectedJob;
+        private string _wedSelectedJob;
+        private string _thuSelectedJob;
+        private string _friSelectedJob;
+        private string _satSelectedJob;
+        private string _sunSelectedShift;
+        private string _monSelectedShift;
+        private string _tueSelectedShift;
+        private string _wedSelectedShift;
+        private string _thuSelectedShift;
+        private string _friSelectedShift;
+        private string _satSelectedShift;
+        private List<string> _sunShiftsAvailableForJob;
+        private List<string> _monShiftsAvailableForJob;
+        private List<string> _tueShiftsAvailableForJob;
+        private List<string> _wedShiftsAvailableForJob;
+        private List<string> _thuShiftsAvailableForJob;
+        private List<string> _friShiftsAvailableForJob;
+        private List<string> _satShiftsAvailableForJob;
+        private int _sunNumShiftsAvailableForJob;
+        private int _monNumShiftsAvailableForJob;
+        private int _tueNumShiftsAvailableForJob;
+        private int _wedNumShiftsAvailableForJob;
+        private int _thuNumShiftsAvailableForJob;
+        private int _friNumShiftsAvailableforJob;
+        private int _satNumShiftsAvailableForJob;
 
-        public List<IShift> SunShiftsAvailableForJob
+        //public string SunAssignedShift { get; set; }
+
+        public List<string> SunShiftsAvailableForJob
         {
-            get { return DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob); }
+            get { return _sunShiftsAvailableForJob; }
             set
             {
                 _sunShiftsAvailableForJob = value;
+                //if (SunSelectedJob != null && SunShiftsAvailableForJob != null && SunSelectedShift !=null)
+                //{
+                //    SunNumShiftsAvailableForJob =
+                //        DataAccess.GetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle,
+                //            SunSelectedShift);
+                //}
                 NotifyOfPropertyChange(() => SunShiftsAvailableForJob);
             }
         }
 
-        public INumAvailable SunNumShiftsAvailableForJob
+
+        public string SunSelectedShift
+        {
+            get { return _sunSelectedShift; }
+            set
+            {
+                _sunSelectedShift = value;
+                if (SunSelectedJob != null && SunSelectedShift != null)
+                {
+                    SunNumShiftsAvailableForJob =
+                       DataAccess.GetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle, SunSelectedShift);
+                }
+                NotifyOfPropertyChange(() => SunSelectedShift);
+            }
+        }
+
+        public int SunNumShiftsAvailableForJob
         {
             get
             {
-                return DataAccess.GetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob, SunSelectedShift);
+                return _sunNumShiftsAvailableForJob;
             }
             set
             {
                 _sunNumShiftsAvailableForJob = value;
+                if (SunSelectedJob.JobTitle != null && SunSelectedShift != null)
+                {
+                    DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle,
+                        SunSelectedShift, SunNumShiftsAvailableForJob);
+                }
                 NotifyOfPropertyChange(() => SunNumShiftsAvailableForJob);
             }
         }
 
+        public Job SunSelectedJob
+        {
+            get { return _sunSelectedJob; }
+            set
+            {
+                _sunSelectedJob = value;
+                if (SunSelectedJob != null && DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle) != null)
+                {
+                    SunShiftsAvailableForJob =
+                        DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle);
+                }
+                NotifyOfPropertyChange(() => SunSelectedJob);
+            }
+        }
 
         public ShellViewModel()
         {
@@ -90,6 +134,7 @@ namespace ScheduleWhizRedux.ViewModels
             modifyEmployeeViewModel = new ModifyEmployeeViewModel();
             addJobViewModel = new AddJobViewModel();
             modifyJobViewModel = new ModifyJobViewModel();
+            addShiftViewModel = new AddShiftViewModel();
         }
 
         public BindableCollection<Job> AllJobs
@@ -112,7 +157,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob SelectedAssignedJob
+        public string SelectedAssignedJob
         {
             get { return _selectedAssignedJob; }
             set
@@ -122,7 +167,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob SelectedAvailableJob
+        public string SelectedAvailableJob
         {
             get { return _selectedAvailableJob; }
             set
@@ -132,17 +177,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob SunSelectedJob
-        {
-            get { return _sunSelectedJob; }
-            set
-            {
-                _sunSelectedJob = value;
-                NotifyOfPropertyChange(() => SunSelectedJob);
-            }
-        }
-
-        public IJob MonSelectedJob
+        public string MonSelectedJob
         {
             get { return _monSelectedJob; }
             set
@@ -152,7 +187,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob TueSelectedJob
+        public string TueSelectedJob
         {
             get { return _tueSelectedJob; }
             set
@@ -162,7 +197,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob WedSelectedJob
+        public string WedSelectedJob
         {
             get { return _wedSelectedJob; }
             set
@@ -172,7 +207,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob ThuSelectedJob
+        public string ThuSelectedJob
         {
             get { return _thuSelectedJob; }
             set
@@ -182,7 +217,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob FriSelectedJob
+        public string FriSelectedJob
         {
             get { return _friSelectedJob; }
             set
@@ -192,7 +227,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IJob SatSelectedJob
+        public string SatSelectedJob
         {
             get { return _satSelectedJob; }
             set
@@ -202,17 +237,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift SunSelectedShift
-        {
-            get { return _sunSelectedShift; }
-            set
-            {
-                _sunSelectedShift = value;
-                NotifyOfPropertyChange(() => SunSelectedShift);
-            }
-        }
-
-        public IShift MonSelectedShift
+        public string MonSelectedShift
         {
             get { return _monSelectedShift; }
             set
@@ -222,7 +247,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift TueSelectedShift
+        public string TueSelectedShift
         {
             get { return _tueSelectedShift; }
             set
@@ -232,7 +257,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift WedSelectedShift
+        public string WedSelectedShift
         {
             get { return _wedSelectedShift; }
             set
@@ -242,7 +267,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift ThuSelectedShift
+        public string ThuSelectedShift
         {
             get { return _thuSelectedShift; }
             set
@@ -252,7 +277,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift FriSelectedShift
+        public string FriSelectedShift
         {
             get { return _friSelectedShift; }
             set
@@ -262,7 +287,7 @@ namespace ScheduleWhizRedux.ViewModels
             }
         }
 
-        public IShift SatSelectedShift
+        public string SatSelectedShift
         {
             get { return _satSelectedShift; }
             set
@@ -433,6 +458,54 @@ namespace ScheduleWhizRedux.ViewModels
             {
                 MessageBox.Show("You must select an employee and a job to assign or unassign.", "Input Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        public void SunAddShift()
+        {
+            if (SunSelectedJob == null)
+            {
+                // TODO: Add a message.
+                return;
+            }
+
+            addShiftViewModel.Day = DayOfWeek.Sunday;
+            addShiftViewModel.Job = SunSelectedJob.JobTitle;
+            addShiftViewModel.NumAvailable = SunNumShiftsAvailableForJob;
+
+            var result = windowManager.ShowDialog(addShiftViewModel);
+            if (result != true) return;
+            SunShiftsAvailableForJob = DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle);
+        }
+
+        public void SunRemoveShift()
+        {
+            if (SunSelectedJob == null || SunSelectedShift == null)
+            {
+                // TODO: Add a message.
+                return;
+            }
+
+            if (MessageBox.Show("Do you really want to remove the shift from the database? This cannot be undone.",
+                    "Remove Job?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                // Do nothing if user says no.
+            }
+            else
+            {
+                if (DataAccess.RemoveShiftForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle, SunSelectedShift))
+                {
+                    MessageBox.Show("This shift was successfully removed from the database.", "Operation Successful",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    SunShiftsAvailableForJob =
+                        DataAccess.GetAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle);
+                }
+                else
+                {
+                    MessageBox.Show("Unable to remove the shift from the database.", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
