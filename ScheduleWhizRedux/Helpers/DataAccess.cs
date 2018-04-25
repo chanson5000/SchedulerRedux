@@ -147,28 +147,28 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var queryString = "select Id from Jobs where Title = @Title;";
+                var queryString = "select * from Jobs where JobTitle = @JobTitle;";
 
                 var result = connection.QueryFirstOrDefault<Job>(queryString,
                     new
                     {
-                        Title = jobTitle
+                        JobTitle = jobTitle
                     });
 
                 return result.Id;
             }
         }
 
-        public static Job GetJobRecordFromTitle(IJob jobTitle)
+        public static Job GetJobRecordFromTitle(string jobTitle)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var queryString = "select * from Jobs where Title = @Title;";
+                var queryString = "select * from Jobs where JobTitle = @JobTitle;";
 
                 var result = connection.QueryFirstOrDefault<Job>(queryString,
                     new
                     {
-                        Title = jobTitle
+                        JobTitle = jobTitle
                     });
 
                 return result;
@@ -179,9 +179,9 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                string query = "select * from Jobs where Title = @Title;";
+                string query = "select * from Jobs where JobTitle = @JobTitle;";
 
-                var result = connection.QueryFirstOrDefault(query, new { Title = title });
+                var result = connection.QueryFirstOrDefault(query, new { JobTitle = title });
 
                 return result != null;
             }
@@ -191,7 +191,7 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                string query = "select * from Jobs where Title = @Title;";
+                string query = "select * from Jobs where JobTitle = @JobTitle;";
 
                 var result = connection.QueryFirstOrDefault(query,
                     new
@@ -214,7 +214,7 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var result = connection.Query<Job>("select * from Jobs order by LOWER(Title);").ToList();
+                var result = connection.Query<Job>("select * from Jobs order by LOWER(JobTitle);").ToList();
 
                 return result;
             }
@@ -224,7 +224,7 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var queryString = "select * from Jobs order by LOWER(Title);";
+                var queryString = "select * from Jobs order by LOWER(JobTitle);";
 
                 var result = connection.Query<Job>(queryString).ToList();
 
@@ -243,11 +243,11 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                string insertQuery = "INSERT INTO Jobs (Title) VALUES (@Title);";
+                string insertQuery = "INSERT INTO Jobs (JobTitle) VALUES (@JobTitle);";
 
                 int result = connection.Execute(insertQuery, new
                 {
-                    Title = jobTitle
+                    JobTitle = jobTitle
                 });
 
                 return result != 0;
@@ -258,7 +258,7 @@ namespace ScheduleWhizRedux.Helpers
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                string updateQuery = "UPDATE Jobs SET Title = @Title WHERE Id = @Id;";
+                string updateQuery = "UPDATE Jobs SET JobTitle = @JobTitle WHERE Id = @Id;";
 
                 int result = connection.Execute(updateQuery,
                     new
@@ -393,18 +393,19 @@ namespace ScheduleWhizRedux.Helpers
         // Assigned Shifts Data Access
         
         // Add a new shift for a job on a certain day of the week.
-        public static bool AddShiftForJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName, int numAvailable = 0)
+        public static bool AddShiftForJobOnDay(DayOfWeek day, string jobTitle, string shiftName, int numAvailable = 0)
         {
+            var jobId = GetJobIdFromTitle(jobTitle);
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
                 var query =
-                    "insert into AssignedShifts (DayOfWeek, JobTitle, ShiftName, NumAvailable) values (@DayOfWeek, @JobTitle, @ShiftName, @NumAvailable);";
+                    "insert into AssignedShifts (DayOfWeek, JobId, ShiftName, NumAvailable) values (@DayOfWeek, @JobId, @ShiftName, @NumAvailable);";
 
                 var result = connection.Execute(query,
                     new
                     {
                         DayOfWeek = day,
-                        JobTitle = jobTitle,
+                        JobId = jobId,
                         ShiftName = shiftName,
                         NumAvailable = numAvailable
                     });
@@ -414,18 +415,19 @@ namespace ScheduleWhizRedux.Helpers
         }
 
         // Remove shift for a job on a certain day of the week.
-        public static bool RemoveShiftforJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName)
+        public static bool RemoveShiftForJobOnDay(DayOfWeek day, string jobTitle, string shiftName)
         {
+            var jobId = GetJobIdFromTitle(jobTitle);
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
                 var query =
-                    "delete from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @Jobtitle and ShiftName = @ShiftName;";
+                    "delete from AssignedShifts where DayOfWeek = @DayOfWeek and JobId = @JobId and ShiftName = @ShiftName;";
 
                 var result = connection.Execute(query,
                     new
                     {
                         DayOfWeek = day,
-                        JobTitle = jobTitle,
+                        JobId = jobId,
                         ShiftName = shiftName
                     });
 
@@ -434,35 +436,82 @@ namespace ScheduleWhizRedux.Helpers
         }
 
 
-        public static List<IShift> GetAvailableShiftsForJobOnDay(DayOfWeek day, IJob jobTitle)
+        public static List<string> GetAvailableShiftsForJobOnDay(DayOfWeek day, string jobTitle)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
-                var query = "select ShiftName from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @JobTitle;";
+                var jobId = GetJobIdFromTitle(jobTitle);
 
-                var result = connection.Query<IShift>(query,
+                var query = "select ShiftName from AssignedShifts where DayOfWeek = @DayOfWeek and JobId = @JobId;";
+
+                var result = connection.Query<string>(query,
                     new
                     {
                         DayOfWeek = day,
-                        JobTitle = jobTitle
+                        JobId = jobId
                     }).ToList();
+                
+                return result;
+            }
+        }
+
+        public static int GetNumAvailableShiftsForJobOnDay(DayOfWeek day, string jobTitle, string shiftName)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var jobId = GetJobIdFromTitle(jobTitle);
+
+                var query =
+                    "select NumAvailable from AssignedShifts where DayOfWeek = @DayOfWeek and JobId = @JobId and ShiftName = @ShiftName;";
+
+                var result = connection.QueryFirstOrDefault<int>(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobId = jobId,
+                        ShiftName = shiftName
+                    });
 
                 return result;
             }
         }
 
-        public static INumAvailable GetNumAvailableShiftsForJobOnDay(DayOfWeek day, IJob jobTitle, IShift shiftName)
+        public static bool SetNumAvailableShiftsForJobOnDay(DayOfWeek day, string jobTitle, string shiftName,
+            int numShiftsAvailable)
+        {
+            using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
+            {
+                var jobId = GetJobIdFromTitle(jobTitle);
+
+                var query =
+                    "update AssignedShifts set NumAvailable = @NumAvailable where DayOfWeek = @DayOfWeek and JobId = @JobId and ShiftName = @ShiftName;";
+
+                var result = connection.Execute(query,
+                    new
+                    {
+                        DayOfWeek = day,
+                        JobId = jobId,
+                        ShiftName = shiftName,
+                        NumAvailable = numShiftsAvailable
+                    });
+
+                return result != 0;
+            }
+        }
+
+        // TODO: Make assigned shifts work like this.
+        public static AssignedShift GetAssignedShiftInfo(DayOfWeek day, int jobId, string shiftName)
         {
             using (IDbConnection connection = new SQLiteConnection(Helper.SQLiteConnString()))
             {
                 var query =
-                    "select NumAvailable from AssignedShifts where DayOfWeek = @DayOfWeek and JobTitle = @JobTitle and ShiftName = @ShiftName;";
+                    "select * from AssignedShifts where DayOfWeek = @DayOfWeek and JobId = @JobId and ShiftName = @ShiftName;";
 
-                var result = connection.QueryFirstOrDefault<INumAvailable>(query,
+                var result = connection.QueryFirstOrDefault<AssignedShift>(query,
                     new
                     {
                         DayOfWeek = day,
-                        JobTitle = jobTitle,
+                        JobId = jobId,
                         ShiftName = shiftName
                     });
 
