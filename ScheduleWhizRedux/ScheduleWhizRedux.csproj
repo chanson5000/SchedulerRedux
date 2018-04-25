@@ -113,19 +113,17 @@
     <Compile Include="Helpers\DataAccess.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\AssignedJob.cs" />
-    <Compile Include="Models\IJob.cs" />
-    <Compile Include="Models\INumAvailable.cs" />
-    <Compile Include="Models\IShift.cs" />
+    <Compile Include="Interfaces\IJob.cs" />
+    <Compile Include="Interfaces\INumAvailable.cs" />
+    <Compile Include="Interfaces\IShift.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\AssignedShift.cs" />
     <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
     <Compile Include="ViewModels\AddJobViewModel.cs" />
     <Compile Include="ViewModels\AddShiftViewModel.cs" />
-    <Compile Include="ViewModels\FirstChildViewModel.cs" />
     <Compile Include="ViewModels\ModifyEmployeeViewModel.cs" />
     <Compile Include="ViewModels\ModifyJobViewModel.cs" />
-    <Compile Include="ViewModels\SecondChildViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\AddEmployeeView.xaml.cs">
       <DependentUpon>AddEmployeeView.xaml</DependentUpon>
