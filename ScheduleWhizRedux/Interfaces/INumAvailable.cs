@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleWhizRedux.Models
+namespace ScheduleWhizRedux.Interfaces
 {
     public interface INumAvailable
     {
