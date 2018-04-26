@@ -272,7 +272,7 @@
                                     Value="{Binding Path=FriNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
                 <xwpf:IntegerUpDown Grid.Column="6" Grid.Row="9" Margin="10,5,10,5" 
-                                    Value="{Binding Path=SunNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
+                                    Value="{Binding Path=SatNumShiftsAvailableForJob, Mode=TwoWay}" FormatString="N0"
                                     AllowTextInput="False" Increment="1" Maximum="15" Minimum="0"/>
 
 
