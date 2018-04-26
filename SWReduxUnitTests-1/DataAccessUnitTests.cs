@@ -169,8 +169,10 @@ namespace SWReduxUnitTests_1
 
             var result = DataAccess.AssignJobToEmployee(newTestJobToAssign, newTestAssignJobEmployee);
 
+            DataAccess.UnAssignJobFromEmployee(newTestJobToAssign, newTestAssignJobEmployee);
             DataAccess.RemoveJob(newTestJobToAssign);
             DataAccess.RemoveEmployee(newTestAssignJobEmployee);
+            
 
             Assert.True(result);
         }
