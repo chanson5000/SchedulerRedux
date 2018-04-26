@@ -410,7 +410,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _sunNumShiftsAvailableForJob = value;
-                if (SunSelectedJob.JobTitle != null && SunSelectedShift != null)
+                if (SunSelectedJob != null && SunSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Sunday, SunSelectedJob.JobTitle,
                         SunSelectedShift, SunNumShiftsAvailableForJob);
@@ -424,7 +424,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _monNumShiftsAvailableForJob = value;
-                if (MonSelectedJob.JobTitle != null && MonSelectedShift != null)
+                if (MonSelectedJob != null && MonSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Monday, MonSelectedJob.JobTitle,
                         MonSelectedShift, MonNumShiftsAvailableForJob);
@@ -439,7 +439,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _tueNumShiftsAvailableForJob = value;
-                if (TueSelectedJob.JobTitle != null && TueSelectedShift != null)
+                if (TueSelectedJob != null && TueSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Tuesday, TueSelectedJob.JobTitle,
                         TueSelectedShift, TueNumShiftsAvailableForJob);
@@ -454,7 +454,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _wedNumShiftsAvailableForJob = value;
-                if (WedSelectedJob.JobTitle != null && WedSelectedShift != null)
+                if (WedSelectedJob != null && WedSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Wednesday, WedSelectedJob.JobTitle,
                         WedSelectedShift, WedNumShiftsAvailableForJob);
@@ -469,7 +469,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _thuNumShiftsAvailableForJob = value;
-                if (ThuSelectedJob.JobTitle != null && ThuSelectedShift != null)
+                if (ThuSelectedJob != null && ThuSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Thursday, ThuSelectedJob.JobTitle,
                         ThuSelectedShift, ThuNumShiftsAvailableForJob);
@@ -484,7 +484,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _friNumShiftsAvailableForJob = value;
-                if (FriSelectedJob.JobTitle != null && FriSelectedShift != null)
+                if (FriSelectedJob != null && FriSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Friday, FriSelectedJob.JobTitle,
                         FriSelectedShift, FriNumShiftsAvailableForJob);
@@ -499,7 +499,7 @@ namespace ScheduleWhizRedux.ViewModels
             set
             {
                 _satNumShiftsAvailableForJob = value;
-                if (SatSelectedJob.JobTitle != null && SatSelectedShift != null)
+                if (SatSelectedJob != null && SatSelectedShift != null)
                 {
                     DataAccess.SetNumAvailableShiftsForJobOnDay(DayOfWeek.Saturday, SatSelectedJob.JobTitle,
                         SatSelectedShift, SatNumShiftsAvailableForJob);
@@ -519,7 +519,12 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void ModifyEmployee()
         {
-            if (SelectedEmployee == null) return;
+            if (SelectedEmployee == null)
+            {
+                MessageBox.Show("Please select an employee to modify.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
             _modifyEmployeeViewModel.ModifyingEmployee = SelectedEmployee;
             var result = _windowManager.ShowDialog(_modifyEmployeeViewModel);
             if (result == true)
@@ -530,6 +535,12 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void RemoveEmployee()
         {
+            if (SelectedEmployee == null)
+            {
+                MessageBox.Show("Please select an employee to remove.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
             if (MessageBox.Show("Do you really want to remove the employee from the database? This cannot be undone.",
                     "Remove Employee?",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
@@ -564,6 +575,12 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void ModifyJob()
         {
+            if (SelectedJob == null)
+            {
+                MessageBox.Show("Please select a job to modify.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
             if (SelectedJob == null) return;
             _modifyJobViewModel.ModifiedJob = SelectedJob.JobTitle;
             var result = _windowManager.ShowDialog(_modifyJobViewModel);
@@ -574,6 +591,12 @@ namespace ScheduleWhizRedux.ViewModels
 
         public void RemoveJob()
         {
+            if (SelectedJob == null)
+            {
+                MessageBox.Show("Please select a job to remove.", "Input Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
             if (MessageBox.Show("Do you really want to remove the job from the database? This cannot be undone.",
                     "Remove Job?",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
