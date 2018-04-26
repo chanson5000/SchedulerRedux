@@ -540,7 +540,7 @@ namespace ScheduleWhizRedux.Helpers
 
                 var query = "select * from AssignedJobs where EmployeeId = @EmployeeId and JobId = @JobId;";
 
-                var result = connection.QueryFirstOrDefault(query,
+                AssignedJob result = connection.QueryFirstOrDefault<AssignedJob>(query,
                     new
                     {
                         EmployeeId = employee.Id,
