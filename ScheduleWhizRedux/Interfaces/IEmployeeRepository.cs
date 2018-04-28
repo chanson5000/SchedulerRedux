@@ -3,7 +3,7 @@ using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Interfaces
 {
-    public interface IEmployeeRepository : IRepository
+    public interface IEmployeeRepository
     {
         bool Add(Employee employee);
         bool Add(string firstName, string lastName, string emailAddress, string phoneNumber);

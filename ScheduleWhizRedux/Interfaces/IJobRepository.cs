@@ -3,7 +3,7 @@ using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Interfaces
 {
-    public interface IJobRepository : IRepository
+    public interface IJobRepository
     {
         bool Add(string jobTitle);
         bool Exists(string jobTitle);
