@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using ScheduleWhizRedux.Helpers;
+using ScheduleWhizRedux.Interfaces;
 using ScheduleWhizRedux.Models;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    class ModifyEmployeeViewModel : Screen
+    internal class ModifyEmployeeViewModel : Screen
     {
-        private Employee _modifyingEmployee;
+        private readonly IEmployeeRepository _employees;
 
-        public Employee ModifyingEmployee
+        public ModifyEmployeeViewModel()
         {
-            get { return _modifyingEmployee; }
-            set { _modifyingEmployee = value; }
+            _employees = new EmployeeRepository();
         }
+
+        public Employee ModifyingEmployee { get; set; }
 
         public void ModifyEmployee()
         {
@@ -30,13 +28,12 @@ namespace ScheduleWhizRedux.ViewModels
                 return;
             }
 
-            if (DataAccess.ModifyEmployee(ModifyingEmployee))
+            if (_employees.Modify(ModifyingEmployee))
             {
-
                 MessageBox.Show($"The employee, {ModifyingEmployee.FirstName} {ModifyingEmployee.LastName}, was modified.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                this.TryClose(true);
+                TryClose(true);
             }
             else
             {

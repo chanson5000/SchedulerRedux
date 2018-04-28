@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using ScheduleWhizRedux.Helpers;
+using ScheduleWhizRedux.Interfaces;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    public class ModifyJobViewModel : Screen
+    internal class ModifyJobViewModel : Screen
     {
-        private string _modifiedJob;
+        private readonly IJobRepository _jobs;
 
-        public string ModifiedJob
+        public ModifyJobViewModel()
         {
-            get { return _modifiedJob; }
-            set { _modifiedJob = value; }
+            _jobs = new JobRepository();
         }
+
+        public string ModifiedJob { get; set; }
 
         public void ModifyJob()
         {
@@ -28,7 +26,7 @@ namespace ScheduleWhizRedux.ViewModels
                 return;
             }
 
-            if (DataAccess.AddJob(ModifiedJob.Trim()))
+            if (_jobs.Add(ModifiedJob.Trim()))
             {
                 MessageBox.Show($"The job, {ModifiedJob}, was modified.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);

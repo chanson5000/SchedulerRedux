@@ -1,50 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using ScheduleWhizRedux.Helpers;
+using ScheduleWhizRedux.Interfaces;
 using ScheduleWhizRedux.Models;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    public class AddEmployeeViewModel : Screen
+    internal class AddEmployeeViewModel : Screen
     {
-        private string _addFirstName;
-        private string _addLastName;
-        private string _addEmailAddress;
-        private string _addPhoneNumber;
+        private readonly IEmployeeRepository _employees;
 
-        public string AddFirstName
+        public AddEmployeeViewModel()
         {
-            get { return _addFirstName; }
-            set { _addFirstName = value; }
+            _employees = new EmployeeRepository();
         }
 
-        public string AddLastName
-        {
-            get { return _addLastName; }
-            set { _addLastName = value; }
-        }
+        public string AddFirstName { get; set; }
 
-        public string AddEmailAddress
-        {
-            get { return _addEmailAddress; }
-            set { _addEmailAddress = value; }
-        }
+        public string AddLastName { get; set; }
 
-        public string AddPhoneNumber
-        {
-            get { return _addPhoneNumber; }
-            set { _addPhoneNumber = value; }
-        }
+        public string AddEmailAddress { get; set; }
+
+        public string AddPhoneNumber { get; set; }
 
         public void AddEmployee()
         {
-            if (String.IsNullOrWhiteSpace(AddFirstName) || String.IsNullOrWhiteSpace(AddLastName) ||
-                String.IsNullOrWhiteSpace(AddEmailAddress) || String.IsNullOrWhiteSpace(AddPhoneNumber))
+            if (string.IsNullOrWhiteSpace(AddFirstName) || string.IsNullOrWhiteSpace(AddLastName) ||
+                string.IsNullOrWhiteSpace(AddEmailAddress) || string.IsNullOrWhiteSpace(AddPhoneNumber))
             {
                 MessageBox.Show("Please do not leave any fields blank.", "Input Error",
                     MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -59,13 +42,13 @@ namespace ScheduleWhizRedux.ViewModels
                 PhoneNumber = AddPhoneNumber.Trim()
             };
 
-            if (DataAccess.AddEmployee(employee))
+            if (_employees.Add(employee))
             {
                 
                 MessageBox.Show($"The employee, {AddFirstName} {AddLastName}, was added to the database.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                this.TryClose(true);
+                TryClose(true);
             }
             else
             {

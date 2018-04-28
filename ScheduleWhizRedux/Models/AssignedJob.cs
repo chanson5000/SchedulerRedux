@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ScheduleWhizRedux.Helpers;
+﻿using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.Models
 {
@@ -12,8 +7,7 @@ namespace ScheduleWhizRedux.Models
         public int EmployeeId { get; set; }
         public int JobId { get; set; }
 
-        public Employee Employee => DataAccess.GetEmployeeFromId(EmployeeId);
-
-        public string JobTitle => DataAccess.GetJobFromId(JobId).JobTitle;
+        public Employee Employee => new EmployeeRepository().Get(EmployeeId);
+        public string JobTitle => new JobRepository().Get(JobId).JobTitle;
     }
 }

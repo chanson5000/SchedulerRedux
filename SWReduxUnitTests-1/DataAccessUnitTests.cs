@@ -1,240 +1,215 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
-using ScheduleWhizRedux.Helpers;
+using System.Collections.Generic;
+using ScheduleWhizRedux.Interfaces;
 using ScheduleWhizRedux.Models;
+using ScheduleWhizRedux.Repositories;
 using Xunit;
+using Xunit.Sdk;
 
 namespace SWReduxUnitTests_1
 {
-    public class DataAccessUnitTests
+
+
+    public class EmployeeRepositoryUnitTests
     {
-        [Fact]
-        public void AddEmployee_ReturnTrueIfSuccessful()
-        {
-            Employee employeeTestCase = new Employee()
-            {
-                FirstName = "TestAddFirstName",
-                LastName = "TestAddLastName",
-                EmailAddress = "TestAddEmailAddress",
-                PhoneNumber = "TestAddPhoneNumber"
-            };
-            var result = DataAccess.AddEmployee(employeeTestCase);
-            employeeTestCase.Id = DataAccess.GetIdFromEmployee(employeeTestCase);
-            DataAccess.RemoveEmployee(employeeTestCase);
+        private readonly IEmployeeRepository _employees;
 
-            Assert.True(result);
+        public EmployeeRepositoryUnitTests()
+        {
+            _employees = new EmployeeRepository();
         }
 
         [Fact]
-        public void GetIdFromEmployee_ReturnEmployeeId()
+        public void EmployeeAdd_ReturnTrueIfSuccessful()
         {
-            Employee employeeTestCase = new Employee()
+
+            Employee tAddEmployeeRecord = new Employee()
             {
-                FirstName = "TestGetIdFirstName",
-                LastName = "TestGetIdLastName",
-                EmailAddress = "TestGetIdEmailAddress",
-                PhoneNumber = "TestGetIdPhoneNumber"
+                FirstName = "tAddEmpRepFirstName",
+                LastName = "tAddEmpRepLastName",
+                EmailAddress = "tAddEmpRepEmail",
+                PhoneNumber = "tAddEmpRepPhone",
             };
-            DataAccess.AddEmployee(employeeTestCase);
-            var result = DataAccess.GetIdFromEmployee(employeeTestCase);
-            employeeTestCase.Id = result;
 
-            DataAccess.RemoveEmployee(employeeTestCase);
+            bool resultBoolEmployeeAdded = _employees.Add(tAddEmployeeRecord);
 
-            Assert.NotEqual(0, result);
+            // Record was added.
+            Assert.True(resultBoolEmployeeAdded);
+
+            // Cleanup.
+            tAddEmployeeRecord.Id = _employees.GetId(tAddEmployeeRecord);
+            _employees.Remove(tAddEmployeeRecord);
         }
 
         [Fact]
-        public void GetEmployeeFromId_IdShouldEqualId()
+        public void EmployeeExists_ReturnTrueIfExists()
         {
-            Employee employeeTestCase = new Employee()
+            Employee tExistsEmployeeRecord = new Employee()
             {
-                FirstName = "TestGetEmpFirstName",
-                LastName = "TestGetEmpLastName",
-                EmailAddress = "TestGetEmpEmailAddress",
-                PhoneNumber = "TestGetEmpPhoneNumber"
+                FirstName = "tExistsFirstName",
+                LastName = "tExistsLastName",
+                EmailAddress = "tExistsEmail",
+                PhoneNumber = "tExistsPhone"
             };
-            DataAccess.AddEmployee(employeeTestCase);
-            employeeTestCase.Id = DataAccess.GetIdFromEmployee(employeeTestCase);
-            var result = DataAccess.GetEmployeeFromId(employeeTestCase.Id);
 
-            DataAccess.RemoveEmployee(employeeTestCase);
+            _employees.Add(tExistsEmployeeRecord);
 
-            Assert.Equal(employeeTestCase.Id, result.Id);
+            bool resultBoolEmployeeExists = _employees.Exists(tExistsEmployeeRecord);
+
+            // Record exists.
+            Assert.True(resultBoolEmployeeExists);
+
+            // Cleanup.
+            tExistsEmployeeRecord.Id = _employees.GetId(tExistsEmployeeRecord);
+            _employees.Remove(tExistsEmployeeRecord);
         }
 
         [Fact]
-        public void RemoveEmployee_ShouldRemove()
+        public void EmployeeGetId_ReturnEmployeeId()
         {
-            Employee employeeTestCase = new Employee()
+            Employee tGetIdEmployeeRecord = new Employee()
             {
-                FirstName = "TestRemoveEmpFirstName",
-                LastName = "TestRemoveEmpLastName",
-                EmailAddress = "TestRemoveEmpEmailAddress",
-                PhoneNumber = "TestRemoveEmpPhoneNumber"
+                FirstName = "tGetIdFirstName",
+                LastName = "tGetIdLastName",
+                EmailAddress = "tGetIdEmail",
+                PhoneNumber = "tGetIdPhone",
             };
-            DataAccess.AddEmployee(employeeTestCase);
-            employeeTestCase.Id = DataAccess.GetIdFromEmployee(employeeTestCase);
 
-            var result = DataAccess.RemoveEmployee(employeeTestCase);
+            _employees.Add(tGetIdEmployeeRecord);
 
-            Assert.True(result);
+            int resultIntEmployeeId = _employees.GetId(tGetIdEmployeeRecord);
+
+            // Returns an employee Id.
+            Assert.NotEqual(0, resultIntEmployeeId);
+
+            // Cleanup
+            tGetIdEmployeeRecord.Id = resultIntEmployeeId;
+            _employees.Remove(tGetIdEmployeeRecord);
         }
 
         [Fact]
-        public void GetAllEmployees_ShouldReturnEmployeeList()
+        public void EmployeeGet_ReturnsEmployeeObject()
         {
-            var result = DataAccess.GetAllEmployees();
+            Employee tGetEmployeeObjectRecord = new Employee()
+            {
+                FirstName = "tGetEmpObjectFirst",
+                LastName = "tGetEmpObjectLast",
+                EmailAddress = "tGetEmpObjectEmail",
+                PhoneNumber = "tGetEmpObjectPhone"
+            };
 
-            Assert.IsType<List<Employee>>(result);
+            _employees.Add(tGetEmployeeObjectRecord);
+
+            int resultIntEmployeeId = _employees.GetId(tGetEmployeeObjectRecord);
+
+            Employee resultObjectEmployee = _employees.Get(resultIntEmployeeId);
+
+            // Returned an Employee object.
+            Assert.IsType<Employee>(resultObjectEmployee);
+
+            //Cleanup
+            tGetEmployeeObjectRecord.Id = resultIntEmployeeId;
+            _employees.Remove(tGetEmployeeObjectRecord);
         }
 
         [Fact]
-        public void ModifyEmployee_ShouldUpdate()
+        public void EmployeeGetAllSorted_ReturnsASortedListOfEmployees()
         {
-            Employee employeeTestCase = new Employee()
+            Employee tGetAllEmployee1 = new Employee()
             {
-                FirstName = "TestModFirstName",
-                LastName = "TestModLastName",
-                EmailAddress = "TestModEmailAddress",
-                PhoneNumber = "TestModPhoneNumber"
+                FirstName = "tGAFirst1",
+                LastName = "tGALast1",
+                EmailAddress = "tGAEmail1",
+                PhoneNumber = "tGAPhone1"
+            };
+            Employee tGetAllEmployee2 = new Employee()
+            {
+                FirstName = "tGAFirst2",
+                LastName = "tGALast2",
+                EmailAddress = "tGAEmail2",
+                PhoneNumber = "tGAPhone2"
+            };
+            Employee tGetAllEmployee3 = new Employee()
+            {
+                FirstName = "tGAFirst3",
+                LastName = "tGALast3",
+                EmailAddress = "tGAEmail3",
+                PhoneNumber = "tGAPhone3"
             };
 
-            DataAccess.AddEmployee(employeeTestCase);
+            _employees.Add(tGetAllEmployee1);
+            _employees.Add(tGetAllEmployee2);
+            _employees.Add(tGetAllEmployee3);
 
-            employeeTestCase.Id = DataAccess.GetIdFromEmployee(employeeTestCase);
+            List<Employee> resultSortedList = _employees.GetAllSorted();
 
-            employeeTestCase.FirstName = "TestNewFirstName";
-            employeeTestCase.LastName = "TestNewLastName";
-            employeeTestCase.EmailAddress = "TestNewEmailAddress";
-            employeeTestCase.PhoneNumber = "testNewPhoneNumber";
+            // Returned a list
+            Assert.IsType<List<Employee>>(resultSortedList);
 
-            DataAccess.ModifyEmployee(employeeTestCase);
-
-            Employee modifiedFromDatabase = DataAccess.GetEmployeeFromId(employeeTestCase.Id);
-
-            DataAccess.RemoveEmployee(employeeTestCase);
-            
-            Assert.Equal(employeeTestCase.Id, employeeTestCase.Id);
-            Assert.Equal(employeeTestCase.FirstName, modifiedFromDatabase.FirstName);
-            Assert.Equal(employeeTestCase.LastName, modifiedFromDatabase.LastName);
-            Assert.Equal(employeeTestCase.EmailAddress, modifiedFromDatabase.EmailAddress);
-            Assert.Equal(employeeTestCase.PhoneNumber, modifiedFromDatabase.PhoneNumber);
+            // Cleanup
+            foreach (var employee in resultSortedList)
+            {
+                _employees.Remove(employee);
+            }
         }
 
         [Fact]
-        public void AddJob_ShouldReturnTrue()
+        public void EmployeeModify_ReturnsModifiedEmployee()
         {
-            Job newTestJob = new Job()
+            Employee tModifyEmployeeStart = new Employee()
             {
-                JobTitle = "Add Job Test"
+                FirstName = "tEmpModFirstStart",
+                LastName = "tEmpModLastStart",
+                EmailAddress = "tEmpModEmailStart",
+                PhoneNumber = "tEmpModPhoneStart"
             };
 
-            var result = DataAccess.AddJob(newTestJob.JobTitle);
+            Employee tModifyEmployeeEnd = new Employee()
+            {
+                FirstName = "tEmpModFirstEnd",
+                LastName = "tEmpModLastEnd",
+                EmailAddress = "tEmpModEmailEnd",
+                PhoneNumber = "tEmpModPhoneEnd"
+            };
 
-            newTestJob.Id = DataAccess.GetJobIdFromTitle(newTestJob.JobTitle);
+            _employees.Add(tModifyEmployeeStart);
 
-            List<Job> allJobs = DataAccess.GetAllJobRecords();
+            tModifyEmployeeEnd.Id = _employees.GetId(tModifyEmployeeStart);
 
-            DataAccess.RemoveJob(newTestJob);
+            bool resultTrueIfModified = _employees.Modify(tModifyEmployeeEnd);
 
-            Assert.True(result);
-            // TODO: Why does this Assert not work like I think it should.
-            Assert.DoesNotContain(newTestJob, allJobs);
+            // Returned true.
+            Assert.True(resultTrueIfModified);
+
+            // Cleanup.
+            _employees.Remove(tModifyEmployeeEnd);
         }
 
         [Fact]
-        public void AssignJobToEmployee_ShouldReturnTrue()
+        public void EmployeeRemove_ReturnTrueIfRemoved()
         {
-            Job newTestJobToAssign = new Job()
+            Employee tEmployeeRemoveRecord = new Employee()
             {
-                JobTitle = "AssignJobTest"
+                FirstName = "tEmpRemFirst",
+                LastName = "tEmpRemLast",
+                EmailAddress = "tEmpRemEmail",
+                PhoneNumber = "tEmpRemPhone"
             };
 
-            Employee newTestAssignJobEmployee = new Employee()
-            {
-                FirstName = "TAJFirstName",
-                LastName = "TAJLastName",
-                EmailAddress = "TAJEmailAddress",
-                PhoneNumber = "TAJPhoneNumber"
-            };
+            _employees.Add(tEmployeeRemoveRecord);
 
-            DataAccess.AddJob(newTestJobToAssign.JobTitle);
-            DataAccess.AddEmployee(newTestAssignJobEmployee);
+            tEmployeeRemoveRecord.Id = _employees.GetId(tEmployeeRemoveRecord);
 
-            newTestJobToAssign.Id = DataAccess.GetJobIdFromTitle(newTestJobToAssign.JobTitle);
+            bool resultReturnTrue = _employees.Remove(tEmployeeRemoveRecord);
 
-            newTestAssignJobEmployee.Id = DataAccess.GetIdFromEmployee(newTestAssignJobEmployee);
+            // Returned true.
+            Assert.True(resultReturnTrue);
 
-            var result = DataAccess.AssignJobToEmployee(newTestJobToAssign, newTestAssignJobEmployee);
+            // Cleanup.
+            _employees.Remove(tEmployeeRemoveRecord);
 
-            DataAccess.RemoveJob(newTestJobToAssign);
-            DataAccess.RemoveEmployee(newTestAssignJobEmployee);
-
-            Assert.True(result);
         }
-
-        [Fact]
-        public void AddShiftForJobOnDay_ReturnTrueIfSuccessful()
-        {
-            var jobTitle = "TestJobAssignment";
-            DataAccess.AddJob(jobTitle);
-            var dayOfWeek = DayOfWeek.Monday;
-            var shiftToAdd = "TestShiftAssignment";
-
-
-            var result = DataAccess.AddShiftForJobOnDay(dayOfWeek, jobTitle, shiftToAdd);
-
-            DataAccess.RemoveShiftForJobOnDay(dayOfWeek, jobTitle, shiftToAdd);
-
-            Job jobToRemove = new Job()
-            {
-                Id = DataAccess.GetJobIdFromTitle(jobTitle),
-                JobTitle = jobTitle
-            };
-
-            DataAccess.RemoveJob(jobToRemove);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void JobExists_ReturnTrueIfExists()
-        {
-            Job jobObjectToTestIfExists = new Job()
-            {
-                JobTitle = "jobToTestIfExists"
-            };
-
-            DataAccess.AddJob(jobObjectToTestIfExists.JobTitle);
-
-            var result = DataAccess.JobExists(jobObjectToTestIfExists);
-
-            DataAccess.RemoveJob(jobObjectToTestIfExists.JobTitle);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void GetJobIdFromTitle_ReturnJobId()
-        {
-            Job testGetJobId = new Job()
-            {
-                JobTitle = "TestGetJobId"
-            };
-
-            DataAccess.AddJob(testGetJobId.JobTitle);
-            
-            testGetJobId.Id = DataAccess.GetJobIdFromTitle(testGetJobId.JobTitle);
-
-            var result = DataAccess.JobRecordExists(testGetJobId);
-
-            DataAccess.RemoveJob(testGetJobId);
-
-            Assert.True(result);
-        }
-
-        
     }
+    
 }

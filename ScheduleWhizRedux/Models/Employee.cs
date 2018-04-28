@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ScheduleWhizRedux.Helpers;
+﻿using System.Collections.Generic;
+using ScheduleWhizRedux.Interfaces;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.Models
 {
-    public class Employee
+    public class Employee : IEmployee
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -16,13 +13,11 @@ namespace ScheduleWhizRedux.Models
         public string PhoneNumber { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
-
         public string FullInfo => $"{FirstName} {LastName} ({EmailAddress})";
-
         public string Details => $"{EmailAddress} - {PhoneNumber}";
+  
+        public List<string> AssignedJobs => new AssignedJobRepository().Get(Id);
+        public List<string> AvailableJobs => new AssignedJobRepository().GetAvailable(Id);
 
-        public List<string> AssignedJobs => DataAccess.GetEmployeeAssignedJobs(Id);
-
-        public List<string> AvailableJobs => DataAccess.GetEmployeeAvailableJobs(Id);
     }
 }
