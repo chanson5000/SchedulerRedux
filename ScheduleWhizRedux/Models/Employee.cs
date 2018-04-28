@@ -16,8 +16,8 @@ namespace ScheduleWhizRedux.Models
         public string FullInfo => $"{FirstName} {LastName} ({EmailAddress})";
         public string Details => $"{EmailAddress} - {PhoneNumber}";
   
-        public List<string> AssignedJobs => new Repository().AssignedJobs.Get(Id);
-        public List<string> AvailableJobs => new Repository().AssignedJobs.GetAvailable(Id);
+        public List<string> AssignedJobs => new AssignedJobRepository().Get(Id);
+        public List<string> AvailableJobs => new AssignedJobRepository().GetAvailable(Id);
 
     }
 }

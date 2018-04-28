@@ -7,7 +7,7 @@ namespace ScheduleWhizRedux.Models
         public int EmployeeId { get; set; }
         public int JobId { get; set; }
 
-        public Employee Employee => new Repository().Employees.Get(EmployeeId);
-        public string JobTitle => new Repository().Jobs.Get(JobId).JobTitle;
+        public Employee Employee => new EmployeeRepository().Get(EmployeeId);
+        public string JobTitle => new JobRepository().Get(JobId).JobTitle;
     }
 }

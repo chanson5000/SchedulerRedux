@@ -13,7 +13,7 @@ namespace ScheduleWhizRedux.Models
 
         public string JobTitle
         {
-            get => new Repository().Jobs.Get(JobId).JobTitle;
+            get => new JobRepository().Get(JobId).JobTitle;
             set { }
         }
     }
