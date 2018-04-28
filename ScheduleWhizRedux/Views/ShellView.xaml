@@ -33,7 +33,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- Row 1 -->
-                <ListBox x:Name="Employees" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
+                <ListBox x:Name="AllEmployees" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" 
                     DisplayMemberPath="FullName" SelectedItem="{Binding Path=SelectedEmployee, Mode=OneWayToSource}"
                     Width="250" Margin="5" />
 

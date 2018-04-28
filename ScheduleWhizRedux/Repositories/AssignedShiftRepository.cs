@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
@@ -9,8 +10,9 @@ using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Repositories
 {
-    internal class AssignedShiftRepository : Repository, IAssignedShiftRepository
+    public class AssignedShiftRepository : Repository, IAssignedShiftRepository
     {
+        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Add a new shift for a job on a day of the week.
         /// </summary>
@@ -75,7 +77,7 @@ namespace ScheduleWhizRedux.Repositories
         /// <returns>A list of strings.</returns>
         public List<string> GetAvailable(DayOfWeek day, string jobTitle)
         {
-            using (IDbConnection connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(ConnectionString))
             {
                 var jobId = Jobs.GetId(jobTitle);
 
@@ -101,7 +103,7 @@ namespace ScheduleWhizRedux.Repositories
         /// <returns>Returns an integer.</returns>
         public int GetNumAvailable(DayOfWeek day, string jobTitle, string shiftName)
         {
-            using (IDbConnection connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(ConnectionString))
             {
                 var jobId = Jobs.GetId(jobTitle);
 

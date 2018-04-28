@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
@@ -7,8 +8,9 @@ using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Repositories
 {
-    internal class AssignedJobRepository : Repository, IAssignedJobRepository
+    public class AssignedJobRepository : Repository, IAssignedJobRepository
     {
+        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Get jobs assigned to an employee by employee id.
         /// </summary>
@@ -25,6 +27,7 @@ namespace ScheduleWhizRedux.Repositories
                     }).ToList();
 
                 List<string> result = new List<string>();
+
                 List<Job> allJobs = Jobs.GetAllSorted();
 
                 foreach (var assignedJobRecord in assigneJobIds)

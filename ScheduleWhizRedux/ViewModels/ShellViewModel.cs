@@ -10,7 +10,6 @@ namespace ScheduleWhizRedux.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
-        private readonly Repository _repository;
         private readonly IEmployeeRepository _employees;
         private readonly IJobRepository _jobs;
         private readonly IAssignedJobRepository _assignedJobs;
@@ -58,11 +57,10 @@ namespace ScheduleWhizRedux.ViewModels
 
         public ShellViewModel()
         {
-            _repository = new Repository();
-            _employees = _repository.Employees;
-            _jobs = _repository.Jobs;
-            _assignedJobs = _repository.AssignedJobs;
-            _assignedShifts = _repository.AssignedShifts;
+            _employees = new EmployeeRepository();
+            _jobs = new JobRepository();
+            _assignedJobs = new AssignedJobRepository();
+            _assignedShifts = new AssignedShiftRepository();
             AllEmployees = new BindableCollection<Employee>(_employees.GetAllSorted());
             AllJobs = new BindableCollection<Job>(_jobs.GetAllSorted());
             _windowManager = new WindowManager();
@@ -144,7 +142,7 @@ namespace ScheduleWhizRedux.ViewModels
                 if (SunSelectedJob != null && _assignedShifts.GetAvailable(DayOfWeek.Sunday, SunSelectedJob.JobTitle) != null)
                 {
                     SunShiftsAvailableForJob =
-                        _repository.AssignedShifts.GetAvailable(DayOfWeek.Sunday, SunSelectedJob.JobTitle);
+                        _assignedShifts.GetAvailable(DayOfWeek.Sunday, SunSelectedJob.JobTitle);
                 }
                 NotifyOfPropertyChange(() => SunSelectedJob);
             }

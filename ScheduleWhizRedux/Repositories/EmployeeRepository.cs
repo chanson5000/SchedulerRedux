@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
@@ -7,8 +8,9 @@ using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Repositories
 {
-    internal class EmployeeRepository : Repository, IEmployeeRepository
+    public class EmployeeRepository : Repository, IEmployeeRepository
     {
+        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Add an employee to the database.
         /// </summary>
