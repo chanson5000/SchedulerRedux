@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
+using ScheduleWhizRedux.Interfaces;
 using ScheduleWhizRedux.Models;
 using ScheduleWhizRedux.Repositories;
 using Xunit;
@@ -12,7 +13,12 @@ namespace SWReduxUnitTests_1
 
     public class EmployeeRepositoryUnitTests
     {
-        private readonly Repository _repository = new Repository();
+        private readonly IEmployeeRepository _employees;
+
+        public EmployeeRepositoryUnitTests()
+        {
+            _employees = new EmployeeRepository();
+        }
 
         [Fact]
         public void EmployeeAdd_ReturnTrueIfSuccessful()
@@ -26,14 +32,14 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tAddEmpRepPhone",
             };
 
-            bool resultBoolEmployeeAdded = _repository.Employees.Add(tAddEmployeeRecord);
+            bool resultBoolEmployeeAdded = _employees.Add(tAddEmployeeRecord);
 
             // Record was added.
             Assert.True(resultBoolEmployeeAdded);
 
             // Cleanup.
-            tAddEmployeeRecord.Id = _repository.Employees.GetId(tAddEmployeeRecord);
-            _repository.Employees.Remove(tAddEmployeeRecord);
+            tAddEmployeeRecord.Id = _employees.GetId(tAddEmployeeRecord);
+            _employees.Remove(tAddEmployeeRecord);
         }
 
         [Fact]
@@ -47,16 +53,16 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tExistsPhone"
             };
 
-            _repository.Employees.Add(tExistsEmployeeRecord);
+            _employees.Add(tExistsEmployeeRecord);
 
-            bool resultBoolEmployeeExists = _repository.Employees.Exists(tExistsEmployeeRecord);
+            bool resultBoolEmployeeExists = _employees.Exists(tExistsEmployeeRecord);
 
             // Record exists.
             Assert.True(resultBoolEmployeeExists);
 
             // Cleanup.
-            tExistsEmployeeRecord.Id = _repository.Employees.GetId(tExistsEmployeeRecord);
-            _repository.Employees.Remove(tExistsEmployeeRecord);
+            tExistsEmployeeRecord.Id = _employees.GetId(tExistsEmployeeRecord);
+            _employees.Remove(tExistsEmployeeRecord);
         }
 
         [Fact]
@@ -70,16 +76,16 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tGetIdPhone",
             };
 
-            _repository.Employees.Add(tGetIdEmployeeRecord);
+            _employees.Add(tGetIdEmployeeRecord);
 
-            int resultIntEmployeeId = _repository.Employees.GetId(tGetIdEmployeeRecord);
+            int resultIntEmployeeId = _employees.GetId(tGetIdEmployeeRecord);
 
             // Returns an employee Id.
             Assert.NotEqual(0, resultIntEmployeeId);
 
             // Cleanup
             tGetIdEmployeeRecord.Id = resultIntEmployeeId;
-            _repository.Employees.Remove(tGetIdEmployeeRecord);
+            _employees.Remove(tGetIdEmployeeRecord);
         }
 
         [Fact]
@@ -93,18 +99,18 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tGetEmpObjectPhone"
             };
 
-            _repository.Employees.Add(tGetEmployeeObjectRecord);
+            _employees.Add(tGetEmployeeObjectRecord);
 
-            int resultIntEmployeeId = _repository.Employees.GetId(tGetEmployeeObjectRecord);
+            int resultIntEmployeeId = _employees.GetId(tGetEmployeeObjectRecord);
 
-            Employee resultObjectEmployee = _repository.Employees.Get(resultIntEmployeeId);
+            Employee resultObjectEmployee = _employees.Get(resultIntEmployeeId);
 
             // Returned an Employee object.
             Assert.IsType<Employee>(resultObjectEmployee);
 
             //Cleanup
             tGetEmployeeObjectRecord.Id = resultIntEmployeeId;
-            _repository.Employees.Remove(tGetEmployeeObjectRecord);
+            _employees.Remove(tGetEmployeeObjectRecord);
         }
 
         [Fact]
@@ -132,11 +138,11 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tGAPhone3"
             };
 
-            _repository.Employees.Add(tGetAllEmployee1);
-            _repository.Employees.Add(tGetAllEmployee2);
-            _repository.Employees.Add(tGetAllEmployee3);
+            _employees.Add(tGetAllEmployee1);
+            _employees.Add(tGetAllEmployee2);
+            _employees.Add(tGetAllEmployee3);
 
-            List<Employee> resultSortedList = _repository.Employees.GetAllSorted();
+            List<Employee> resultSortedList = _employees.GetAllSorted();
 
             // Returned a list
             Assert.IsType<List<Employee>>(resultSortedList);
@@ -144,7 +150,7 @@ namespace SWReduxUnitTests_1
             // Cleanup
             foreach (var employee in resultSortedList)
             {
-                _repository.Employees.Remove(employee);
+                _employees.Remove(employee);
             }
         }
 
@@ -167,17 +173,17 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tEmpModPhoneEnd"
             };
 
-            _repository.Employees.Add(tModifyEmployeeStart);
+            _employees.Add(tModifyEmployeeStart);
 
-            tModifyEmployeeEnd.Id = _repository.Employees.GetId(tModifyEmployeeStart);
+            tModifyEmployeeEnd.Id = _employees.GetId(tModifyEmployeeStart);
 
-            bool resultTrueIfModified = _repository.Employees.Modify(tModifyEmployeeEnd);
+            bool resultTrueIfModified = _employees.Modify(tModifyEmployeeEnd);
 
             // Returned true.
             Assert.True(resultTrueIfModified);
 
             // Cleanup.
-            _repository.Employees.Remove(tModifyEmployeeEnd);
+            _employees.Remove(tModifyEmployeeEnd);
         }
 
         [Fact]
@@ -191,17 +197,17 @@ namespace SWReduxUnitTests_1
                 PhoneNumber = "tEmpRemPhone"
             };
 
-            _repository.Employees.Add(tEmployeeRemoveRecord);
+            _employees.Add(tEmployeeRemoveRecord);
 
-            tEmployeeRemoveRecord.Id = _repository.Employees.GetId(tEmployeeRemoveRecord);
+            tEmployeeRemoveRecord.Id = _employees.GetId(tEmployeeRemoveRecord);
 
-            bool resultReturnTrue = _repository.Employees.Remove(tEmployeeRemoveRecord);
+            bool resultReturnTrue = _employees.Remove(tEmployeeRemoveRecord);
 
             // Returned true.
             Assert.True(resultReturnTrue);
 
             // Cleanup.
-            _repository.Employees.Remove(tEmployeeRemoveRecord);
+            _employees.Remove(tEmployeeRemoveRecord);
 
         }
     }
