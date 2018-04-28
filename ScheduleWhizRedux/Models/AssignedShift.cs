@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ScheduleWhizRedux.Helpers;
 using ScheduleWhizRedux.Interfaces;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.Models
 {
-    public class AssignedShift : IShift, IJob, INumAvailable
+    public class AssignedShift : IShift, IJob
     {
         public DayOfWeek DayOfWeek { get; set; }
         public string ShiftName { get; set; }
@@ -17,7 +13,7 @@ namespace ScheduleWhizRedux.Models
 
         public string JobTitle
         {
-            get => DataAccess.GetJobFromId(JobId).JobTitle;
+            get => new Repository().Jobs.Get(JobId).JobTitle;
             set { }
         }
     }

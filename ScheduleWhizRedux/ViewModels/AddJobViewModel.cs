@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using ScheduleWhizRedux.Helpers;
+using ScheduleWhizRedux.Interfaces;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    public class AddJobViewModel : Screen
+    internal class AddJobViewModel : Screen
     {
-        private string _newJob;
+        private readonly IJobRepository _jobs;
 
-        public string NewJob
+        public AddJobViewModel()
         {
-            get { return _newJob; }
-            set { _newJob = value; }
+            _jobs = new JobRepository();
         }
+
+        public string NewJob { get; set; }
 
         public void AddJob()
         {
-            if (String.IsNullOrWhiteSpace(NewJob))
+            if (string.IsNullOrWhiteSpace(NewJob))
             {
                 MessageBox.Show("Please do not leave any fields blank.", "Input Error",
                     MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            if (DataAccess.AddJob(NewJob.Trim()))
+            if (_jobs.Add(NewJob.Trim()))
             {
                 MessageBox.Show($"The job, {NewJob}, was added to the database.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);

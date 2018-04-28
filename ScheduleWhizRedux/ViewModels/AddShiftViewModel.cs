@@ -1,56 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using ScheduleWhizRedux.Helpers;
-using ScheduleWhizRedux.Models;
+using ScheduleWhizRedux.Interfaces;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux.ViewModels
 {
-    public class AddShiftViewModel : Screen
+    internal class AddShiftViewModel : Screen
     {
-        private DayOfWeek _day;
-        private int _numAvailable;
-        private string _job;
-        private string _newShift;
+        private readonly IAssignedShiftRepository _assignedShifts;
 
-        public string NewShift
+        public AddShiftViewModel()
         {
-            get { return _newShift; }
-            set { _newShift = value; }
+            _assignedShifts = new AssignedShiftRepository();
         }
 
-        public string Job
-        {
-            get { return _job; }
-            set { _job = value; }
-        }
+        public string NewShift { get; set; }
 
-        public DayOfWeek Day
-        {
-            get { return _day; }
-            set { _day = value; }
-        }
+        public string Job { get; set; }
 
-        public int NumAvailable
-        {
-            get { return _numAvailable; }
-            set { _numAvailable = value; }
-        }
-    
+        public DayOfWeek Day { get; set; }
+
+        public int NumAvailable { get; set; }
+
         public void AddShift()
         {
-            if (String.IsNullOrWhiteSpace(NewShift))
+            if (string.IsNullOrWhiteSpace(NewShift))
             {
                 MessageBox.Show("Please do not leave any fields blank.", "Input Error",
                     MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            if (DataAccess.AddShiftForJobOnDay(Day, Job, NewShift.Trim(), NumAvailable))
+            if (_assignedShifts.Add(Day, Job, NewShift.Trim(), NumAvailable))
             {
                 MessageBox.Show($"The shift, {NewShift}, was added to the database.", "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
