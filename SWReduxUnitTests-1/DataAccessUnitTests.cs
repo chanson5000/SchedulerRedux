@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using ScheduleWhizRedux.Models;
 using ScheduleWhizRedux.Repositories;
