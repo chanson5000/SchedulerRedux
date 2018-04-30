@@ -54,6 +54,13 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Independentsoft.Office.Odf, Version=2.0.460.20005, Culture=neutral, PublicKeyToken=76be97fe952f1ec7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Independentsoft.Office.Odf.2.0.460\lib\Independentsoft.Office.Odf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -122,11 +129,14 @@
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\AssignedShift.cs" />
+    <Compile Include="Models\Shift.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="Repositories\AssignedJobRepository.cs" />
     <Compile Include="Repositories\AssignedShiftRepository.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\JobRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Scheduler.cs" />
     <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
     <Compile Include="ViewModels\AddJobViewModel.cs" />
     <Compile Include="ViewModels\AddShiftViewModel.cs" />
@@ -171,7 +181,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
