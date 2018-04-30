@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
@@ -10,7 +9,6 @@ namespace ScheduleWhizRedux.Repositories
 {
     public class JobRepository : Repository, IJobRepository
     {
-        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Add a job to the database.
         /// </summary>
@@ -88,7 +86,7 @@ namespace ScheduleWhizRedux.Repositories
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                var queryString = "select * from Jobs where Id @Id;";
+                var queryString = "select * from Jobs where Id = @Id;";
 
                 Job result = connection.Query<Job>(queryString,
                     new

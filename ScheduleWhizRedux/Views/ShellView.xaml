@@ -10,7 +10,7 @@
     <TabControl>
         <!-- Tab 1 - Modify Employees -->
         <TabItem Header="Modify Employees">
-            <Grid Height="350">
+            <Grid MaxHeight="600">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="Auto" />
@@ -279,22 +279,18 @@
             </Grid>
         </TabItem>
         <TabItem Header="Schedule">
-            <Grid>
+            <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
+                <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="5" Content="Generate" Click="Button_Click" />
             </Grid>
 
         </TabItem>

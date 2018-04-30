@@ -13,5 +13,6 @@ namespace ScheduleWhizRedux.Interfaces
         List<string> GetAvailable(Employee employee);
         bool IsJobAssignedToEmployee(string jobTitle, Employee employee);
         bool IsJobAssignedToEmployee(Job job, Employee employee);
+        List<AssignedJob> GetAll();
     }
 }

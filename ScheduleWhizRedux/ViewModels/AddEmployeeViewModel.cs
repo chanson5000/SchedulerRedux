@@ -48,6 +48,10 @@ namespace ScheduleWhizRedux.ViewModels
                 MessageBox.Show($"The employee, {AddFirstName} {AddLastName}, was added to the database.",
                     "Operation Successful",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+                AddFirstName = "";
+                AddLastName = "";
+                AddEmailAddress = "";
+                AddPhoneNumber = "";
                 TryClose(true);
             }
             else

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ScheduleWhizRedux.Models;
 
 namespace ScheduleWhizRedux.Interfaces
 {
@@ -10,5 +11,6 @@ namespace ScheduleWhizRedux.Interfaces
         List<string> GetAvailable(DayOfWeek day, string jobTitle);
         int GetNumAvailable(DayOfWeek day, string jobTitle, string shiftName);
         bool SetNumAvailable(DayOfWeek day, string jobTitle, string shiftName, int numShiftsAvailable);
+        List<AssignedShift> GetAll();
     }
 }
