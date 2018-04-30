@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
@@ -12,7 +10,6 @@ namespace ScheduleWhizRedux.Repositories
 {
     public class AssignedShiftRepository : Repository, IAssignedShiftRepository
     {
-        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Add a new shift for a job on a day of the week.
         /// </summary>
@@ -174,6 +171,18 @@ namespace ScheduleWhizRedux.Repositories
                         JobId = jobId,
                         ShiftName = shiftName
                     });
+
+                return result;
+            }
+        }
+
+        public List<AssignedShift> GetAll()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                var query = "select * from AssignedShifts;";
+
+                List<AssignedShift> result = connection.Query<AssignedShift>(query).ToList();
 
                 return result;
             }
