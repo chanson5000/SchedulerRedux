@@ -14,8 +14,8 @@ namespace ScheduleWhizRedux.ViewModels
         private readonly IJobRepository _jobs;
         private readonly IAssignedJobRepository _assignedJobs;
         private readonly IAssignedShiftRepository _assignedShifts;
-        private BindableCollection<Employee> _allEmployees = new BindableCollection<Employee>();
-        private BindableCollection<Job> _allJobs = new BindableCollection<Job>();
+        private BindableCollection<Employee> _allEmployees;
+        private BindableCollection<Job> _allJobs;
         private Employee _selectedEmployee;
         private Job _selectedJob;
         private string _selectedAssignedJob;
@@ -319,6 +319,10 @@ namespace ScheduleWhizRedux.ViewModels
                     SunNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Sunday, SunSelectedJob.JobTitle, SunSelectedShift);
                 }
+                else
+                {
+                    SunNumShiftsAvailableForJob = 0;
+                }
                 NotifyOfPropertyChange(() => SunSelectedShift);
             }
         }
@@ -333,6 +337,10 @@ namespace ScheduleWhizRedux.ViewModels
                 {
                     MonNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Monday, MonSelectedJob.JobTitle, MonSelectedShift);
+                }
+                else
+                {
+                    MonNumShiftsAvailableForJob = 0;
                 }
                 NotifyOfPropertyChange(() => MonSelectedShift);
             }
@@ -349,6 +357,10 @@ namespace ScheduleWhizRedux.ViewModels
                     TueNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Tuesday, TueSelectedJob.JobTitle, TueSelectedShift);
                 }
+                else
+                {
+                    TueNumShiftsAvailableForJob = 0;
+                }
                 NotifyOfPropertyChange(() => TueSelectedShift);
             }
         }
@@ -363,6 +375,10 @@ namespace ScheduleWhizRedux.ViewModels
                 {
                     WedNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Wednesday, WedSelectedJob.JobTitle, WedSelectedShift);
+                }
+                else
+                {
+                    WedNumShiftsAvailableForJob = 0;
                 }
                 NotifyOfPropertyChange(() => WedSelectedShift);
             }
@@ -379,6 +395,10 @@ namespace ScheduleWhizRedux.ViewModels
                     ThuNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Thursday, ThuSelectedJob.JobTitle, ThuSelectedShift);
                 }
+                else
+                {
+                    ThuNumShiftsAvailableForJob = 0;
+                }
                 NotifyOfPropertyChange(() => ThuSelectedShift);
             }
         }
@@ -394,6 +414,10 @@ namespace ScheduleWhizRedux.ViewModels
                     FriNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Friday, FriSelectedJob.JobTitle, FriSelectedShift);
                 }
+                else
+                {
+                    FriNumShiftsAvailableForJob = 0;
+                }
                 NotifyOfPropertyChange(() => FriSelectedShift);
             }
         }
@@ -408,6 +432,10 @@ namespace ScheduleWhizRedux.ViewModels
                 {
                     SatNumShiftsAvailableForJob =
                         _assignedShifts.GetNumAvailable(DayOfWeek.Saturday, SatSelectedJob.JobTitle, SatSelectedShift);
+                }
+                else
+                {
+                    SatNumShiftsAvailableForJob = 0;
                 }
                 NotifyOfPropertyChange(() => SatSelectedShift);
             }
@@ -637,10 +665,10 @@ namespace ScheduleWhizRedux.ViewModels
 
                 if (_assignedJobs.Remove(jobToUnAssign, SelectedEmployee))
                 {
-                    MessageBox.Show(
-                        $"The job, {jobToUnAssign.JobTitle}, was unassigned from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
-                        "Operation Successful",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show(
+                    //    $"The job, {jobToUnAssign.JobTitle}, was unassigned from {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                    //    "Operation Successful",
+                    //    MessageBoxButton.OK, MessageBoxImage.Information);
                     NotifyOfPropertyChange(() => SelectedEmployee);
                 }
                 else
@@ -657,10 +685,10 @@ namespace ScheduleWhizRedux.ViewModels
 
                 if (_assignedJobs.Add(jobToAssign, SelectedEmployee))
                 {
-                    MessageBox.Show(
-                        $"The job, {jobToAssign.JobTitle}, was assigned to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
-                        "Operation Successful",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show(
+                    //    $"The job, {jobToAssign.JobTitle}, was assigned to {SelectedEmployee.FirstName} {SelectedEmployee.LastName}.",
+                    //    "Operation Successful",
+                    //    MessageBoxButton.OK, MessageBoxImage.Information);
                     NotifyOfPropertyChange(() => SelectedEmployee);
                 }
                 else
