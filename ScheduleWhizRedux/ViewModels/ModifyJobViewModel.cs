@@ -43,8 +43,5 @@ namespace ScheduleWhizRedux.ViewModels
         {
             TryClose(false);
         }
-
-
-
     }
 }
