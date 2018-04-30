@@ -86,7 +86,7 @@ namespace ScheduleWhizRedux.Repositories
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                var queryString = "select * from Jobs where Id @Id;";
+                var queryString = "select * from Jobs where Id = @Id;";
 
                 Job result = connection.Query<Job>(queryString,
                     new
