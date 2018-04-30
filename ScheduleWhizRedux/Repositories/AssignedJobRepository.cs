@@ -10,7 +10,6 @@ namespace ScheduleWhizRedux.Repositories
 {
     public class AssignedJobRepository : Repository, IAssignedJobRepository
     {
-        //private static string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
         /// <summary>
         /// Get jobs assigned to an employee by employee id.
         /// </summary>
@@ -170,6 +169,22 @@ namespace ScheduleWhizRedux.Repositories
         public bool IsJobAssignedToEmployee(Job job, Employee employee)
         {
             return IsJobAssignedToEmployee(job.JobTitle, employee);
+        }
+
+        /// <summary>
+        /// Get all assigned job records.
+        /// </summary>
+        /// <returns>Returns a list of assigned job records.</returns>
+        public List<AssignedJob> GetAll()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                var query = "select * from AssignedJobs;";
+
+                List<AssignedJob> result = connection.Query<AssignedJob>(query).ToList();
+
+                return result;
+            }
         }
     }
 }
