@@ -71,13 +71,22 @@ namespace ScheduleWhizRedux
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                row = RowStart;
 
                 scheduleTable[column, 2] = new Cell(day.ToString());
-                foreach (Employee employee in _employees)
+                while (_availableShifts.Any(x => x.DayOfWeek.Equals(day)))
                 {
-                    scheduleTable[column, row] = new Cell(PlotShift(day, employee));
-                    row++;
+                    row = RowStart;
+
+                    foreach (Employee employee in _employees)
+                    {
+                        var cellInfo = PlotShift(day, employee);
+                        if (cellInfo != "")
+                        {
+                            scheduleTable[column, row] = new Cell(cellInfo);
+                        }
+
+                        row++;
+                    }
                 }
 
                 column += 2;
@@ -86,18 +95,33 @@ namespace ScheduleWhizRedux
             Spreadsheet spreadsheet = new Spreadsheet();
 
             spreadsheet.Tables.Add(scheduleTable);
+            string defaultFileName = "Schedule";
 
-
-            spreadsheet.Save("c:\\test\\output.ods", true);
-
-            System.Diagnostics.Process.Start("c:\\test\\output.ods");
-
-
+            if (!System.IO.File.Exists($"c:\\test\\{defaultFileName}.ods"))
+            {
+                spreadsheet.Save($"c:\\test\\{defaultFileName}.ods", false);
+                System.Diagnostics.Process.Start($"c:\\test\\{defaultFileName}.ods");
+            }
+            else
+            {
+                int saveCopy = 1;
+                while (System.IO.File.Exists($"c:\\test\\{defaultFileName}-{saveCopy}.ods"))
+                {
+                    saveCopy++;
+                }
+                    spreadsheet.Save($"c:\\test\\{defaultFileName}-{saveCopy}.ods", false);
+                    System.Diagnostics.Process.Start($"c:\\test\\{defaultFileName}-{saveCopy}.ods");
+            }
         }
+
 
         public string PlotShift(DayOfWeek day, Employee employee)
         {
-            //var empAvailJobs = _availableJobs.FindAll(x => x.EmployeeId.Equals(employee.Id));
+            if (random.Next(0, 3) == 0)
+            {
+                return "";
+            }
+
             var shiftsForDay = _availableShifts.FindAll(x => x.DayOfWeek.Equals(day));
 
             int jobId;
@@ -110,21 +134,15 @@ namespace ScheduleWhizRedux
                 }
             }
 
-            if (shiftsForDay.Any())
-            {
-                var shiftToPlot = shiftsForDay[random.Next(0, shiftsForDay.Count)];
-                _availableShifts.Remove(shiftToPlot);
-                if (shiftToPlot.NumAvailable > 1)
-                {
-                    shiftToPlot.NumAvailable--;
-                    _availableShifts.Add(shiftToPlot);
-                }
+            if (!shiftsForDay.Any()) return "";
+            var shiftToPlot = shiftsForDay[random.Next(0, shiftsForDay.Count)];
+            _availableShifts.Remove(shiftToPlot);
+            if (shiftToPlot.NumAvailable <= 1) return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
+            shiftToPlot.NumAvailable--;
+            _availableShifts.Add(shiftToPlot);
 
-                return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
-            }
-            //var shiftToPlot = shiftsForDay.FirstOrDefault();
+            return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
 
-            return "";
         }
     }
 }
