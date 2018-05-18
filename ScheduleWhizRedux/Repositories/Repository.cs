@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using ScheduleWhizRedux.Interfaces;
 
 namespace ScheduleWhizRedux.Repositories
@@ -10,7 +11,7 @@ namespace ScheduleWhizRedux.Repositories
         public IAssignedJobRepository AssignedJobs => new AssignedJobRepository();
         public IAssignedShiftRepository AssignedShifts => new AssignedShiftRepository();
 
-        public string ConnectionString => ConfigurationManager.ConnectionStrings ["SWReDB"]. ConnectionString;
+        public string ConnectionString => ConfigurationManager.ConnectionStrings["SWReDB"].ConnectionString;
     }
 }
 
