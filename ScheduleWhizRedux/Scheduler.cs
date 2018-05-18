@@ -97,20 +97,20 @@ namespace ScheduleWhizRedux
             spreadsheet.Tables.Add(scheduleTable);
             string defaultFileName = "Schedule";
 
-            if (!System.IO.File.Exists($"c:\\test\\{defaultFileName}.ods"))
+            if (!System.IO.File.Exists($"{defaultFileName}.ods"))
             {
-                spreadsheet.Save($"c:\\test\\{defaultFileName}.ods", false);
-                System.Diagnostics.Process.Start($"c:\\test\\{defaultFileName}.ods");
+                spreadsheet.Save($"{defaultFileName}.ods", false);
+                System.Diagnostics.Process.Start($"{defaultFileName}.ods");
             }
             else
             {
                 int saveCopy = 1;
-                while (System.IO.File.Exists($"c:\\test\\{defaultFileName}-{saveCopy}.ods"))
+                while (System.IO.File.Exists($"{defaultFileName}-{saveCopy}.ods"))
                 {
                     saveCopy++;
                 }
-                    spreadsheet.Save($"c:\\test\\{defaultFileName}-{saveCopy}.ods", false);
-                    System.Diagnostics.Process.Start($"c:\\test\\{defaultFileName}-{saveCopy}.ods");
+                    spreadsheet.Save($"{defaultFileName}-{saveCopy}.ods", false);
+                    System.Diagnostics.Process.Start($"{defaultFileName}-{saveCopy}.ods");
             }
         }
 
