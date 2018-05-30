@@ -119,7 +119,6 @@ namespace ScheduleWhizRedux
                 }
                 spreadsheet.Save($"{spreadsheetName}-{saveCopy}.xlsx");
                 LaunchSpreadsheet($"{spreadsheetName}-{saveCopy}");
-                //System.Diagnostics.Process.Start($"{spreadsheetName}-{saveCopy}.ods");
             }
 
         }
