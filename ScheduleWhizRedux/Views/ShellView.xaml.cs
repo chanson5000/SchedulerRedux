@@ -1,6 +1,6 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using ScheduleWhizRedux.Repositories;
+using ScheduleWhizRedux.Utilities;
 
 
 namespace ScheduleWhizRedux.Views

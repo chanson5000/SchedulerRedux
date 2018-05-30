@@ -7,7 +7,7 @@ using System.Linq;
 using ScheduleWhizRedux.Repositories;
 using DayOfWeek = System.DayOfWeek;
 
-namespace ScheduleWhizRedux
+namespace ScheduleWhizRedux.Utilities
 {
     public class Scheduler
     {
