@@ -27,7 +27,7 @@ namespace ScheduleWhizRedux.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Scheduler scheduler = new Scheduler(new EmployeeRepository().GetAllSorted(), new JobRepository().GetAllSorted(), new AssignedJobRepository().GetAll(), new AssignedShiftRepository().GetAll());
+            Scheduler scheduler = new Scheduler(new EmployeeRepository().GetAllSorted(), new AssignedShiftRepository().GetAll());
             scheduler.Generate();
         }
     }

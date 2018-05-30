@@ -1,11 +1,9 @@
 ﻿using System;
-using Independentsoft.Office.Odf;
-using ScheduleWhizRedux.Interfaces;
+using GemBox.Spreadsheet;
 using ScheduleWhizRedux.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Independentsoft.Office.Odf.Styles;
 using ScheduleWhizRedux.Repositories;
 using DayOfWeek = System.DayOfWeek;
 
@@ -13,111 +11,73 @@ namespace ScheduleWhizRedux
 {
     public class Scheduler
     {
-        private List<Employee> _employees;
-        private List<Job> _jobs;
-        private List<AssignedJob> _availableJobs;
-        private List<AssignedShift> _availableShifts;
-        Random random = new Random();
+        private readonly List<Employee> _employees;
+        private readonly List<AssignedShift> _availableShifts;
+        private readonly Random _random = new Random();
 
-        public Scheduler(List<Employee> employees, List<Job> jobs, List<AssignedJob> assignedJobs,
-            List<AssignedShift> assignedShifts)
+        public Scheduler(List<Employee> employees, List<AssignedShift> assignedShifts)
         {
             _employees = employees;
-            _jobs = jobs;
-            _availableJobs = assignedJobs;
             _availableShifts = assignedShifts;
         }
 
         public void Generate()
         {
-            Table scheduleTable = new Table();
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
 
-            //table1[1, 1] = new Cell(1);
-            //table1[2, 1] = new Cell(2);
-            //table1[3, 1] = new Cell(3);
-            //table1[4, 1] = new Cell(4);
-            //table1[5, 1] = new Cell(5);
+            const string workSheetName = "Generated Schedule";
+            const string fileType = "xlsx";
 
-            //table1["A", 2] = new Cell(11);
-            //table1["B", 2] = new Cell(22);
-            //table1["C", 2] = new Cell(33);
-            //table1["D", 2] = new Cell(44);
-            //table1["E", 2] = new Cell(55);
+            ExcelFile excelFile = new ExcelFile();
+            ExcelWorksheet worksheet = excelFile.Worksheets.Add(workSheetName);
 
-            //table1["A3"] = new Cell(111);
-            //table1["B3"] = new Cell(222);
-            //table1["C3"] = new Cell(333);
-            //table1["D3"] = new Cell(444);
-            //table1["E3"] = new Cell(555);
+            const int dataColumnStart = 1;
+            const int dataRowStart = 2;
 
-            //Spreadsheet spreadsheet = new Spreadsheet();
-            //spreadsheet.Tables.Add(table1);
-
-            //spreadsheet.Save("c:\\test\\output.ods", true);
-
-            scheduleTable[2, 1] = new Cell("Generated Schedule");
-            const int ColumnStart = 3;
-            const int RowStart = 3;
-
-            int column = ColumnStart;
-            int row = RowStart;
+            int column = dataColumnStart;
+            int row = dataRowStart;
 
             foreach (Employee employee in _employees)
             {
-                scheduleTable[1, row] = new Cell(employee.FullName);
+                worksheet.Cells[row, 0].Value = employee.FullName;
                 row++;
             }
 
-
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
+                worksheet.Cells[dataRowStart - 1, column].Value = day.ToString();
 
-                scheduleTable[column, 2] = new Cell(day.ToString());
                 while (_availableShifts.Any(x => x.DayOfWeek.Equals(day)))
                 {
-                    row = RowStart;
+                    row = dataRowStart;
 
                     foreach (Employee employee in _employees)
                     {
                         var cellInfo = PlotShift(day, employee);
                         if (cellInfo != "")
                         {
-                            scheduleTable[column, row] = new Cell(cellInfo);
+                            worksheet.Cells[row, column].Value = cellInfo;
                         }
 
                         row++;
                     }
                 }
 
-                column += 2;
+                column++;
             }
 
-            Spreadsheet spreadsheet = new Spreadsheet();
-
-            spreadsheet.Tables.Add(scheduleTable);
             string defaultFileName = "Schedule";
 
-            if (!System.IO.File.Exists($"{defaultFileName}.ods"))
-            {
-                spreadsheet.Save($"{defaultFileName}.ods", false);
-                System.Diagnostics.Process.Start($"{defaultFileName}.ods");
-            }
-            else
-            {
-                int saveCopy = 1;
-                while (System.IO.File.Exists($"{defaultFileName}-{saveCopy}.ods"))
-                {
-                    saveCopy++;
-                }
-                    spreadsheet.Save($"{defaultFileName}-{saveCopy}.ods", false);
-                    System.Diagnostics.Process.Start($"{defaultFileName}-{saveCopy}.ods");
-            }
+            AutoFitWorksheet(worksheet);
+
+            string spreadsheetFileName = SaveSpreadsheet(excelFile, defaultFileName, fileType);
+
+            LaunchSpreadsheet(spreadsheetFileName);
         }
 
-
-        public string PlotShift(DayOfWeek day, Employee employee)
+        private string PlotShift(DayOfWeek day, Employee employee)
         {
-            if (random.Next(0, 3) == 0)
+            if (_random.Next(0, 3) == 0)
             {
                 return "";
             }
@@ -135,14 +95,47 @@ namespace ScheduleWhizRedux
             }
 
             if (!shiftsForDay.Any()) return "";
-            var shiftToPlot = shiftsForDay[random.Next(0, shiftsForDay.Count)];
+            var shiftToPlot = shiftsForDay[_random.Next(0, shiftsForDay.Count)];
             _availableShifts.Remove(shiftToPlot);
             if (shiftToPlot.NumAvailable <= 1) return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
             shiftToPlot.NumAvailable--;
             _availableShifts.Add(shiftToPlot);
 
             return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
+        }
 
+        private string SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName, string fileType)
+        {
+            if (!File.Exists($"{spreadsheetName}.{fileType}"))
+            {
+                spreadsheet.Save($"{spreadsheetName}.{fileType}");
+
+                return $"{spreadsheetName}.{fileType}";
+            }
+
+            int saveCopy = 1;
+            while (File.Exists($"{spreadsheetName}-{saveCopy}.{fileType}"))
+            {
+                saveCopy++;
+            }
+            spreadsheet.Save($"{spreadsheetName}-{saveCopy}.{fileType}");
+
+            return $"{spreadsheetName}-{saveCopy}.{fileType}";
+        }
+
+        private void LaunchSpreadsheet(string spreadsheetName)
+        {
+            System.Diagnostics.Process.Start(spreadsheetName);
+        }
+
+        private void AutoFitWorksheet(ExcelWorksheet worksheet)
+        {
+            int columnCount = worksheet.CalculateMaxUsedColumns();
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                worksheet.Columns[i].AutoFit(1, worksheet.Rows[1], worksheet.Rows[worksheet.Rows.Count - 1]);
+            }
         }
     }
 }

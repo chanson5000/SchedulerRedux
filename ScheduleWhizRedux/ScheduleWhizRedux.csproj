@@ -69,8 +69,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Independentsoft.Office.Odf, Version=2.0.460.20005, Culture=neutral, PublicKeyToken=76be97fe952f1ec7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Independentsoft.Office.Odf.2.0.460\lib\Independentsoft.Office.Odf.dll</HintPath>
+    <Reference Include="GemBox.Spreadsheet, Version=43.0.35.1020, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
+      <HintPath>..\packages\GemBox.Spreadsheet.43.0.0.1020\lib\net35\GemBox.Spreadsheet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
