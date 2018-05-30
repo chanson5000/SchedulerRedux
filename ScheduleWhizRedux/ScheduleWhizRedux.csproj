@@ -150,7 +150,7 @@
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\JobRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="Scheduler.cs" />
+    <Compile Include="Utilities\Scheduler.cs" />
     <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
     <Compile Include="ViewModels\AddJobViewModel.cs" />
     <Compile Include="ViewModels\AddShiftViewModel.cs" />
