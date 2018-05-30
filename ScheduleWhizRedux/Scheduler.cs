@@ -30,8 +30,10 @@ namespace ScheduleWhizRedux
         {
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
 
+            const string workSheetName = "Generated Schedule";
+
             ExcelFile excelFile = new ExcelFile();
-            ExcelWorksheet worksheet = excelFile.Worksheets.Add("Generated Schedule");
+            ExcelWorksheet worksheet = excelFile.Worksheets.Add(workSheetName);
 
             const int dataColumnStart = 1;
             const int dataRowStart = 2;
