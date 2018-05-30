@@ -13,11 +13,11 @@ Create a master list of job titles that can be assigned to your employees.
 
 ## Modify Shifts
 Create flexible job and shift availablity for each day of the week.
-<img src="./images/ScheduleWhiz-Screen-02.png">
+<img src="./images/ScheduleWhiz-Screen-03.png">
 
 # Generate A Schedule
 Quickly generate a schedule in an Excel spreadsheet.
-<img src="./images/ScheduleWhiz-Screen-02.png">
+<img src="./images/ScheduleWhiz-Screen-04.png">
 
 ## Built With
 C# .Net WPF
