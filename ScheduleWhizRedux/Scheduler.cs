@@ -105,7 +105,7 @@ namespace ScheduleWhizRedux
 
         private void SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName)
         {
-            if (!System.IO.File.Exists($"{spreadsheetName}.ods"))
+            if (!File.Exists($"{spreadsheetName}.ods"))
             {
                 spreadsheet.Save($"{spreadsheetName}.xlsx");
                 LaunchSpreadsheet(spreadsheetName);
@@ -113,7 +113,7 @@ namespace ScheduleWhizRedux
             else
             {
                 int saveCopy = 1;
-                while (System.IO.File.Exists($"{spreadsheetName}-{saveCopy}.xlsx"))
+                while (File.Exists($"{spreadsheetName}-{saveCopy}.xlsx"))
                 {
                     saveCopy++;
                 }
