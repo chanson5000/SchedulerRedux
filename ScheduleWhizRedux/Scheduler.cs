@@ -12,8 +12,6 @@ namespace ScheduleWhizRedux
     public class Scheduler
     {
         private readonly List<Employee> _employees;
-        private List<Job> _jobs;
-        private List<AssignedJob> _availableJobs;
         private readonly List<AssignedShift> _availableShifts;
         private readonly Random _random = new Random();
 
@@ -21,8 +19,6 @@ namespace ScheduleWhizRedux
             List<AssignedShift> assignedShifts)
         {
             _employees = employees;
-            _jobs = jobs;
-            _availableJobs = assignedJobs;
             _availableShifts = assignedShifts;
         }
 
