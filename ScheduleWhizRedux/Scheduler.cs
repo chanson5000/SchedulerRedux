@@ -33,44 +33,48 @@ namespace ScheduleWhizRedux
             ExcelFile excelFile = new ExcelFile();
             ExcelWorksheet worksheet = excelFile.Worksheets.Add("Generated Schedule");
 
-            const int columnStart = 1;
-            const int rowStart = 3;
+            const int dataColumnStart = 1;
+            const int dataRowStart = 2;
 
-            int column = columnStart;
-            int row = rowStart;
+            int column = dataColumnStart;
+            int row = dataRowStart;
 
             foreach (Employee employee in _employees)
             {
-                worksheet.Cells[0, row].Value = employee.FullName;
+                worksheet.Cells[row, 0].Value = employee.FullName;
                 row++;
             }
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                worksheet.Cells[column, 2].Value = day.ToString();
+                worksheet.Cells[dataRowStart - 1, column].Value = day.ToString();
 
                 while (_availableShifts.Any(x => x.DayOfWeek.Equals(day)))
                 {
-                    row = rowStart;
+                    row = dataRowStart;
 
                     foreach (Employee employee in _employees)
                     {
                         var cellInfo = PlotShift(day, employee);
                         if (cellInfo != "")
                         {
-                            worksheet.Cells[column, row].Value = cellInfo;
+                            worksheet.Cells[row, column].Value = cellInfo;
                         }
 
                         row++;
                     }
                 }
 
-                column += 2;
+                column++;
             }
 
             string defaultFileName = "Schedule";
 
-            SaveSpreadsheet(excelFile, defaultFileName);
+            AutoFitWorksheet(worksheet);
+
+            string spreadsheetFileName = SaveSpreadsheet(excelFile, defaultFileName);
+
+            LaunchSpreadsheet(spreadsheetFileName);
         }
 
         private string PlotShift(DayOfWeek day, Employee employee)
@@ -102,29 +106,38 @@ namespace ScheduleWhizRedux
             return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
         }
 
-        private void SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName)
+        private string SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName)
         {
-            if (!File.Exists($"{spreadsheetName}.ods"))
+            if (!File.Exists($"{spreadsheetName}.xlsx"))
             {
                 spreadsheet.Save($"{spreadsheetName}.xlsx");
-                LaunchSpreadsheet(spreadsheetName);
-            }
-            else
-            {
-                int saveCopy = 1;
-                while (File.Exists($"{spreadsheetName}-{saveCopy}.xlsx"))
-                {
-                    saveCopy++;
-                }
-                spreadsheet.Save($"{spreadsheetName}-{saveCopy}.xlsx");
-                LaunchSpreadsheet($"{spreadsheetName}-{saveCopy}");
+
+                return $"{spreadsheetName}.xlsx";
             }
 
+            int saveCopy = 1;
+            while (File.Exists($"{spreadsheetName}-{saveCopy}.xlsx"))
+            {
+                saveCopy++;
+            }
+            spreadsheet.Save($"{spreadsheetName}-{saveCopy}.xlsx");
+
+            return $"{spreadsheetName}-{saveCopy}.xlsx";
         }
 
         private void LaunchSpreadsheet(string spreadsheetName)
         {
-            System.Diagnostics.Process.Start($"{spreadsheetName}.xlsx");
+            System.Diagnostics.Process.Start(spreadsheetName);
+        }
+
+        private void AutoFitWorksheet(ExcelWorksheet worksheet)
+        {
+            int columnCount = worksheet.CalculateMaxUsedColumns();
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                worksheet.Columns[i].AutoFit(1, worksheet.Rows[1], worksheet.Rows[worksheet.Rows.Count - 1]);
+            }
         }
     }
 }
