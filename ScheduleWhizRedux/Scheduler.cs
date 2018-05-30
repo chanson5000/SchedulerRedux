@@ -31,6 +31,7 @@ namespace ScheduleWhizRedux
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
 
             const string workSheetName = "Generated Schedule";
+            const string fileType = "xlsx";
 
             ExcelFile excelFile = new ExcelFile();
             ExcelWorksheet worksheet = excelFile.Worksheets.Add(workSheetName);
@@ -74,7 +75,7 @@ namespace ScheduleWhizRedux
 
             AutoFitWorksheet(worksheet);
 
-            string spreadsheetFileName = SaveSpreadsheet(excelFile, defaultFileName);
+            string spreadsheetFileName = SaveSpreadsheet(excelFile, defaultFileName, fileType);
 
             LaunchSpreadsheet(spreadsheetFileName);
         }
@@ -108,23 +109,23 @@ namespace ScheduleWhizRedux
             return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
         }
 
-        private string SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName)
+        private string SaveSpreadsheet(ExcelFile spreadsheet, string spreadsheetName, string fileType)
         {
-            if (!File.Exists($"{spreadsheetName}.xlsx"))
+            if (!File.Exists($"{spreadsheetName}.{fileType}"))
             {
-                spreadsheet.Save($"{spreadsheetName}.xlsx");
+                spreadsheet.Save($"{spreadsheetName}.{fileType}");
 
-                return $"{spreadsheetName}.xlsx";
+                return $"{spreadsheetName}.{fileType}";
             }
 
             int saveCopy = 1;
-            while (File.Exists($"{spreadsheetName}-{saveCopy}.xlsx"))
+            while (File.Exists($"{spreadsheetName}-{saveCopy}.{fileType}"))
             {
                 saveCopy++;
             }
-            spreadsheet.Save($"{spreadsheetName}-{saveCopy}.xlsx");
+            spreadsheet.Save($"{spreadsheetName}-{saveCopy}.{fileType}");
 
-            return $"{spreadsheetName}-{saveCopy}.xlsx";
+            return $"{spreadsheetName}-{saveCopy}.{fileType}";
         }
 
         private void LaunchSpreadsheet(string spreadsheetName)
