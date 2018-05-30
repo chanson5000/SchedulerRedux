@@ -16,7 +16,7 @@ namespace ScheduleWhizRedux
         private List<Job> _jobs;
         private List<AssignedJob> _availableJobs;
         private readonly List<AssignedShift> _availableShifts;
-        readonly Random _random = new Random();
+        private readonly Random _random = new Random();
 
         public Scheduler(List<Employee> employees, List<Job> jobs, List<AssignedJob> assignedJobs,
             List<AssignedShift> assignedShifts)
