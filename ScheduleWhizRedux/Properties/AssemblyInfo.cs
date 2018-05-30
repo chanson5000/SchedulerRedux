@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScheduleWhizRedux")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Schedule Whiz")]
+[assembly: AssemblyDescription("A simple workplace shift scheduler.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ScheduleWhizRedux")]
+[assembly: AssemblyCompany("Nverno Media")]
+[assembly: AssemblyProduct("Schedule Whiz")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
