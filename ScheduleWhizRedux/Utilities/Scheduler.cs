@@ -4,7 +4,6 @@ using ScheduleWhizRedux.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ScheduleWhizRedux.Repositories;
 using DayOfWeek = System.DayOfWeek;
 
 namespace ScheduleWhizRedux.Utilities
@@ -21,86 +20,150 @@ namespace ScheduleWhizRedux.Utilities
             _availableShifts = assignedShifts;
         }
 
-        public void Generate()
+        public string Generate()
         {
+            // Need this to use GemBox free version.
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
 
             const string workSheetName = "Generated Schedule";
+            string defaultFileName = "Schedule";
+            // Some other possible options are:
+            // xlsx, ods, csv, html, pdf, png
             const string fileType = "xlsx";
 
             ExcelFile excelFile = new ExcelFile();
             ExcelWorksheet worksheet = excelFile.Worksheets.Add(workSheetName);
 
+            // Neither of these should ever be set to < 1;
             const int dataColumnStart = 1;
             const int dataRowStart = 2;
 
             int column = dataColumnStart;
             int row = dataRowStart;
 
+            // Populating the employee names on y axis.
             foreach (Employee employee in _employees)
             {
-                worksheet.Cells[row, 0].Value = employee.FullName;
+                worksheet.Cells[row, dataColumnStart - 1].Value = employee.FullName;
                 row++;
             }
 
+            // Populate days of the weed on the x axis.
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
                 worksheet.Cells[dataRowStart - 1, column].Value = day.ToString();
-
-                while (_availableShifts.Any(x => x.DayOfWeek.Equals(day)))
-                {
-                    row = dataRowStart;
-
-                    foreach (Employee employee in _employees)
-                    {
-                        var cellInfo = PlotShift(day, employee);
-                        if (cellInfo != "")
-                        {
-                            worksheet.Cells[row, column].Value = cellInfo;
-                        }
-
-                        row++;
-                    }
-                }
-
                 column++;
             }
 
-            string defaultFileName = "Schedule";
+            int maxAttempts = 5;
 
+            // While there are any available shifts.
+
+            while (_availableShifts.Any() && maxAttempts >= 0)
+            {
+                column = dataColumnStart;
+                if (!maxAttempts.Equals(0))
+                {
+                    // Populating the spreadsheet by day.
+                    foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                    {
+                        row = dataRowStart;
+                        foreach (Employee employee in _employees)
+                        {
+                            // If the cell is empty, the employee has job titles, and there are any available shifts for the day.
+                            if (worksheet.Cells[row, column].Value == null
+                                && employee.AvailableJobs.Any()
+                                && _availableShifts.Any(x => x.DayOfWeek.Equals(day)))
+                            {
+                                // Ask for a shift to plot for the employee on that day.
+                                var cellInfo = PlotShift(day, employee);
+
+                                // If we recieve a shift to plot.
+                                if (cellInfo != "")
+                                {
+                                    worksheet.Cells[row, column].Value = cellInfo;
+                                }
+                            }
+
+                            row++;
+                        }
+
+                        column++;
+                    }
+
+                    maxAttempts--;
+                }
+
+                // Too many attempts, find which shifts we were not able to plot.
+                else
+                {
+                    worksheet.Cells[dataRowStart + _employees.Count() + 1, dataColumnStart - 1]
+                        .SetValue("Unable to Schedule:");
+
+                    column = dataColumnStart;
+
+                    foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                    {
+                        // If there are shifts that haven't been plotted for that day of the week.
+                        if (_availableShifts.Exists(x => x.DayOfWeek.Equals(day)))
+                        {
+                            // Plot vertically un-plotted shifts for that day.
+                            foreach (var shift in _availableShifts.Where(x => x.DayOfWeek.Equals(day)))
+                            {
+                                worksheet.Cells[dataRowStart + _employees.Count() + 1, column]
+                                    .SetValue($"{shift.ShiftName} - {shift.JobTitle}");
+                                row++;
+                            }
+                        }
+
+                        column++;
+                    }
+
+                    maxAttempts--;
+                }
+
+            }
+
+            // Format our worksheet.
             AutoFitWorksheet(worksheet);
 
-            string spreadsheetFileName = SaveSpreadsheet(excelFile, defaultFileName, fileType);
-
-            LaunchSpreadsheet(spreadsheetFileName);
+            return SaveSpreadsheet(excelFile, defaultFileName, fileType);
         }
+
 
         private string PlotShift(DayOfWeek day, Employee employee)
         {
-            if (_random.Next(0, 3) == 0)
+            List<string> empAvailableJobs = employee.AvailableJobs;
+
+            // Randomly return no shift to plot in order for plotting to not be the same every time.
+            if (!empAvailableJobs.Any() || _random.Next(0, 2) == 0)
             {
                 return "";
             }
 
-            var shiftsForDay = _availableShifts.FindAll(x => x.DayOfWeek.Equals(day));
+            // Find all the shifts available to plot for the employee.
+            List<AssignedShift> empAvailableShiftsForDay =
+                                _availableShifts.Where(x => x.DayOfWeek.Equals(day)
+                                && empAvailableJobs.Contains(x.JobTitle)).ToList();
 
-            int jobId;
-            foreach (var job in employee.AvailableJobs)
+            // Return nothing if no shifts to plot.
+            if (!empAvailableShiftsForDay.Any()) return "";
+
+            // Randomly pick a shift to plot from the employee's available shifts.
+            AssignedShift shiftToPlot = empAvailableShiftsForDay[_random.Next(0, empAvailableShiftsForDay.Count)];
+
+            AssignedShift shiftRecord = _availableShifts.First(x => x.Equals(shiftToPlot));
+
+            if (shiftRecord.NumAvailable > 1)
             {
-                jobId = new AssignedJobRepository().Jobs.GetId(job);
-                if (shiftsForDay.Any(x => x.JobId == jobId))
-                {
-                    shiftsForDay.RemoveAll(x => x.JobId.Equals(jobId));
-                }
+                shiftRecord.DecrementAvailability();
+            }
+            else
+            {
+                _availableShifts.Remove(shiftRecord);
             }
 
-            if (!shiftsForDay.Any()) return "";
-            var shiftToPlot = shiftsForDay[_random.Next(0, shiftsForDay.Count)];
-            _availableShifts.Remove(shiftToPlot);
-            if (shiftToPlot.NumAvailable <= 1) return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
-            shiftToPlot.NumAvailable--;
-            _availableShifts.Add(shiftToPlot);
-
+            // Return the shift information for plotting.
             return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
         }
 
@@ -123,7 +186,7 @@ namespace ScheduleWhizRedux.Utilities
             return $"{spreadsheetName}-{saveCopy}.{fileType}";
         }
 
-        private void LaunchSpreadsheet(string spreadsheetName)
+        public void LaunchSpreadsheet(string spreadsheetName)
         {
             System.Diagnostics.Process.Start(spreadsheetName);
         }
