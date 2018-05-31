@@ -16,5 +16,10 @@ namespace ScheduleWhizRedux.Models
             get => new JobRepository().Get(JobId).JobTitle;
             set { }
         }
+
+        public void DecrementAvailability()
+        {
+            NumAvailable--;
+        }
     }
 }
