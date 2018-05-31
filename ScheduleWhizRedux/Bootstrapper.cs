@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using Caliburn.Micro;
 using ScheduleWhizRedux.ViewModels;
+using ScheduleWhizRedux.Repositories;
 
 namespace ScheduleWhizRedux
 {
@@ -18,6 +14,7 @@ namespace ScheduleWhizRedux
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            Repository.CheckIfDatabaseExists();
             DisplayRootViewFor<ShellViewModel>();
         }
     }
