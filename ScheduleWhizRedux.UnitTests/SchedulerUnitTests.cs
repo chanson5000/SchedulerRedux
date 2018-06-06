@@ -13,6 +13,7 @@ namespace ScheduleWhizRedux.UnitTests
     public class SchedulerUnitTests
     {
         private Scheduler _scheduler;
+        private string _fileLocation;
 
         [SetUp]
         public void SetUp()
@@ -25,7 +26,15 @@ namespace ScheduleWhizRedux.UnitTests
         {
             var result = _scheduler.Generate();
 
+            _fileLocation = result.SavedFileLocation;
+
             Assert.That(result, Is.TypeOf<Schedule>());
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            System.IO.File.Delete(_fileLocation);
         }
     }
 }
