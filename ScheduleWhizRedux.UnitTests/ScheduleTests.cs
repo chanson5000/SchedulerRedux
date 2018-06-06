@@ -12,10 +12,29 @@ namespace ScheduleWhizRedux.UnitTests
     [TestFixture]
     public class ScheduleTests
     {
-        [Test]
-        public void Create_CreateNewSpreadsheet_ReturnsSpreadsheetObject()
-        {
+        private Schedule _schedule;
+        private string _fileLocation;
 
+        [SetUp]
+        public void SetUp()
+        {
+            _schedule = new Schedule("Test Schedule");
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            System.IO.File.Delete(_fileLocation);
+        }
+
+        [Test]
+        public void Schedule_WhenObjectCreated_DefaultFileNameIsSet()
+        {
+            var result = _schedule.RootFileName;
+
+            _fileLocation = _schedule.SavedFileLocation;
+
+            Assert.That(result, Is.EqualTo("Schedule"));
         }
     }
 }
