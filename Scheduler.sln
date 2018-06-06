@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleWhizRedux", "ScheduleWhizRedux\ScheduleWhizRedux.csproj", "{A9068592-17AB-451B-9FF4-C4B09C564B5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWReduxUnitTests-1", "SWReduxUnitTests-1\SWReduxUnitTests-1.csproj", "{4A9EE2C5-EB3C-47D8-A042-D6D257DB786C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleWhizRedux.UnitTests", "ScheduleWhizRedux.UnitTests\ScheduleWhizRedux.UnitTests.csproj", "{533AC155-BA8B-48C3-AC50-C2029A876B63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A9068592-17AB-451B-9FF4-C4B09C564B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9068592-17AB-451B-9FF4-C4B09C564B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9068592-17AB-451B-9FF4-C4B09C564B5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A9EE2C5-EB3C-47D8-A042-D6D257DB786C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A9EE2C5-EB3C-47D8-A042-D6D257DB786C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A9EE2C5-EB3C-47D8-A042-D6D257DB786C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A9EE2C5-EB3C-47D8-A042-D6D257DB786C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{533AC155-BA8B-48C3-AC50-C2029A876B63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{533AC155-BA8B-48C3-AC50-C2029A876B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{533AC155-BA8B-48C3-AC50-C2029A876B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{533AC155-BA8B-48C3-AC50-C2029A876B63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
