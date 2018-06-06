@@ -288,9 +288,13 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="5" Content="Generate" Click="Button_Click" />
+                <TextBlock Text="Generate Schedule" x:Name="TxtGenerateSchedule" Grid.Row="1" Grid.Column="1" Margin="5"
+                           TextAlignment="Center" VerticalAlignment="Center" FontSize="32" FontWeight="Bold"/>
+                <Button x:Name="BtnGenerate" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="5"
+                        Content="Generate" Click="Generate_Button_Click" />
             </Grid>
 
         </TabItem>
