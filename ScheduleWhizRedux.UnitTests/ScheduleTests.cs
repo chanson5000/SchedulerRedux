@@ -10,7 +10,7 @@ using ScheduleWhizRedux.Models;
 namespace ScheduleWhizRedux.UnitTests
 {
     [TestFixture]
-    public class SpreadsheetTests
+    public class ScheduleTests
     {
         [Test]
         public void Create_CreateNewSpreadsheet_ReturnsSpreadsheetObject()
