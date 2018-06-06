@@ -164,7 +164,7 @@
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\AssignedShift.cs" />
     <Compile Include="Models\Shift.cs" />
-    <Compile Include="Models\Spreadsheet.cs" />
+    <Compile Include="Models\Schedule.cs" />
     <Compile Include="Repositories\AssignedJobRepository.cs" />
     <Compile Include="Repositories\AssignedShiftRepository.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />

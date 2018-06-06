@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using ScheduleWhizRedux.Models;
 using ScheduleWhizRedux.Repositories;
 using ScheduleWhizRedux.Utilities;
 
@@ -32,9 +33,9 @@ namespace ScheduleWhizRedux.Views
                 new AssignedShiftRepository().GetAll().Where(x => x.NumAvailable > 0)
                     .ToList());
  
-            string spreadsheetFileName = scheduler.Generate();
+            Schedule schedule = scheduler.Generate();
 
-            scheduler.LaunchSpreadsheet(spreadsheetFileName);
+            schedule.OpenFile();
         }
     }
 }
