@@ -1,10 +1,5 @@
-﻿using System;
-using GemBox.Spreadsheet;
-using ScheduleWhizRedux.Models;
+﻿using ScheduleWhizRedux.Models;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using DayOfWeek = System.DayOfWeek;
 
 namespace ScheduleWhizRedux.Utilities
 {
@@ -27,11 +22,11 @@ namespace ScheduleWhizRedux.Utilities
             schedule.PopulateDaysOfWeek();
             schedule.PopulateSchedule(_employees, _availableShifts);
             
-            // Format our worksheet.
+            // Format our worksheet to look decent.
             schedule.AutoFormat();
 
-            // May use this for future use.
-            string scheduleSavedAs = schedule.SaveToDisk();
+            // SaveToDisk can return file name.
+            schedule.SaveToDisk();
 
             return schedule;
         }
