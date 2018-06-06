@@ -9,8 +9,8 @@ namespace ScheduleWhizRedux.Models
     public class Schedule
     {
         private readonly string _spreadsheetName;
-        private readonly string _fileName;
-        private string _savedFileName;
+        private readonly string _rootFileName;
+        private string _savedFileLocation;
         private readonly ExcelWorksheet _worksheet;
         private readonly ExcelFile _excelFile;
         private readonly Random _random = new Random();
@@ -29,17 +29,18 @@ namespace ScheduleWhizRedux.Models
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             _excelFile = new ExcelFile();
 
-            _fileName = "Schedule";
+            _rootFileName = "Schedule";
 
             _spreadsheetName = spreadsheetName;
 
             _worksheet = _excelFile.Worksheets.Add(_spreadsheetName);
         }
 
-        public string FileName => _fileName;
+        public string RootFileName => _rootFileName;
+        public string SavedFileLocation => _savedFileLocation;
 
         // Populate the days of the week on the x axis.
-        public void PopulateDaysOfWeek()
+        private void PopulateDaysOfWeek()
         {
             int column = DataColumnStart;
 
@@ -51,7 +52,7 @@ namespace ScheduleWhizRedux.Models
         }
 
         // Populate the employee names on the y axis.
-        public void PopulateEmployeeNames(List<Employee> employees)
+        private void PopulateEmployeeNames(List<Employee> employees)
         {
             int row = DataRowStart;
 
@@ -62,23 +63,13 @@ namespace ScheduleWhizRedux.Models
             }
         }
 
-        public void AutoFormat()
+        private void PopulateShifts(List<Employee> employees, List<AssignedShift> shifts)
         {
-            int columnCount = _worksheet.CalculateMaxUsedColumns();
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                _worksheet.Columns[i].AutoFit(1, _worksheet.Rows[1], _worksheet.Rows[_worksheet.Rows.Count - 1]);
-            }
-        }
-
-        public void PopulateSchedule(List<Employee> employees, List<AssignedShift> shifts)
-        {
+            _availableShifts = shifts;
             int maxAttempts = 5;
             int row = DataRowStart;
-            _availableShifts = shifts;
-            // While there are any available shifts.
 
+            // While there are any available shifts and we havent reached our attemps limit.
             while (_availableShifts.Any() && maxAttempts >= 0)
             {
                 int column = DataColumnStart;
@@ -117,8 +108,8 @@ namespace ScheduleWhizRedux.Models
                 // Too many attempts, find which shifts we were not able to plot.
                 else
                 {
-                   _worksheet.Cells[DataRowStart + employees.Count() + 1, DataColumnStart - 1]
-                        .SetValue("Unable to Schedule:");
+                    _worksheet.Cells[DataRowStart + employees.Count() + 1, DataColumnStart - 1]
+                         .SetValue("Unable to Schedule:");
 
                     column = DataColumnStart;
 
@@ -142,6 +133,24 @@ namespace ScheduleWhizRedux.Models
                     maxAttempts--;
                 }
             }
+        }
+
+        private void AutoFormat()
+        {
+            int columnCount = _worksheet.CalculateMaxUsedColumns();
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                _worksheet.Columns[i].AutoFit(1, _worksheet.Rows[1], _worksheet.Rows[_worksheet.Rows.Count - 1]);
+            }
+        }
+
+        public void PopulateSchedule(List<Employee> employees, List<AssignedShift> shifts)
+        {
+            PopulateDaysOfWeek();
+            PopulateEmployeeNames(employees);
+            PopulateShifts(employees, shifts);
+            AutoFormat();
         }
 
         private string PlotShift(DayOfWeek day, Employee employee)
@@ -183,28 +192,29 @@ namespace ScheduleWhizRedux.Models
 
         public string SaveToDisk()
         {
-            if (!File.Exists($"{_fileName}.{_fileType}"))
+            var userFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!File.Exists($"{userFolder}\\{_rootFileName}.{_fileType}"))
             {
-                _savedFileName = $"{_fileName}.{_fileType}";
-                _excelFile.Save(_savedFileName);
+                _savedFileLocation = $"{userFolder}\\{_rootFileName}.{_fileType}";
+                _excelFile.Save(_savedFileLocation);
                 
-                return _savedFileName;
+                return _savedFileLocation;
             }
 
             int saveCopy = 1;
-            while (File.Exists($"{_fileName}-{saveCopy}.{_fileType}"))
+            while (File.Exists($"{userFolder}\\{_rootFileName}-{saveCopy}.{_fileType}"))
             {
                 saveCopy++;
             }
-            _savedFileName = $"{_fileName}-{saveCopy}.{_fileType}";
-            _excelFile.Save(_savedFileName);
+            _savedFileLocation = $"{userFolder}\\{_rootFileName}-{saveCopy}.{_fileType}";
+            _excelFile.Save(_savedFileLocation);
 
-            return _savedFileName;
+            return _savedFileLocation;
         }
-
+        
         public void OpenFile()
         {
-            System.Diagnostics.Process.Start(_savedFileName);
+            System.Diagnostics.Process.Start(_savedFileLocation);
         }
     }
 }
