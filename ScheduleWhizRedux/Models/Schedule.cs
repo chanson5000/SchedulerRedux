@@ -38,6 +38,7 @@ namespace ScheduleWhizRedux.Models
 
         public string RootFileName => _rootFileName;
         public string SavedFileLocation => _savedFileLocation;
+        public ExcelWorksheet Worksheet => _worksheet;
 
         // Populate the days of the week on the x axis.
         private void PopulateDaysOfWeek()
