@@ -116,7 +116,7 @@ namespace ScheduleWhizRedux.Models
             int maxAttempts = 5;
             int row = DataRowStart;
 
-            // While there are any available shifts and we havent reached our attemps limit.
+            // While there are any available shifts and we havent reached our attempts limit.
             while (_availableShifts.Any() && maxAttempts >= 0)
             {
                 int column = DataColumnStart;
