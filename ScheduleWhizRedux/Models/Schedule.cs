@@ -48,7 +48,7 @@ namespace ScheduleWhizRedux.Models
         public string FileType
         {
             // If _fileType is null, set it to the default.
-            get => _fileType = _fileType ?? DefaultFileType;
+            get => _fileType = _allowedFileTypes.Contains(_fileType) ? _fileType : DefaultFileType;
             // When the property is set, if it is not of the types in the array, set to "xlsx"
             set => _fileType = _allowedFileTypes.Contains(value) ? value : DefaultFileType;
         }
