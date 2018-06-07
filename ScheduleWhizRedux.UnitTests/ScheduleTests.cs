@@ -64,5 +64,36 @@ namespace ScheduleWhizRedux.UnitTests
         // TODO: Add checks for when relevant employee and shifts are provided.
 
         // -------
+        [Test]
+        public void FileType_WhenScheduleInstanciated_FileTypeIsDefault()
+        {
+            var result = _schedule.FileType;
+
+            Assert.That(result, Is.EqualTo("xlsx"));
+        }
+
+        [Test]
+        public void FileType_WhenSetInvalidFileType_FileTypeIsDefault()
+        {
+            _schedule.FileType = "Invalid File Type";
+
+            var result = _schedule.FileType;
+
+            Assert.That(result, Is.EqualTo("xlsx"));
+        }
+
+        [Test]
+        [TestCase("xlsx")]
+        [TestCase("ods")]
+        [TestCase("csv")]
+        [TestCase("html")]
+        [TestCase("pdf")]
+        [TestCase("png")]
+        public void FileType_WhenSetValieFileType_FileTypeIsCorrect(string setFileType)
+        {
+            var result = _schedule.FileType = setFileType;
+
+            Assert.That(result, Is.EqualTo(setFileType));
+        }
     }
 }
