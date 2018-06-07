@@ -39,7 +39,7 @@ namespace ScheduleWhizRedux.Views
             BtnGenerate.IsEnabled = false;
             TxtGenerateSchedule.Text = "Generating Schedule...";
 
-            Schedule schedule = await Task.Run(() => scheduler.Generate());
+            Schedule schedule = await Task.Run(() => scheduler.GenerateSchedule());
 
             schedule.OpenSchedule();
             TxtGenerateSchedule.Text = "Generate Schedule";
