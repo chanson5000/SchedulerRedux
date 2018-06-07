@@ -14,7 +14,7 @@ namespace ScheduleWhizRedux.Utilities
             _availableShifts = assignedShifts;
         }
 
-        public Schedule Generate()
+        public Schedule GenerateSchedule()
         {
             Schedule schedule = new Schedule("Generated Schedule");
 
