@@ -13,10 +13,9 @@ namespace ScheduleWhizRedux.Models
         private List<AssignedShift> _availableShifts;
         private string _fileType;
         private const string DefaultFileType = "xlsx";
-        private readonly string[] _allowedFileTypes = {"xlsx", "ods", "csv", "html", "pdf", "png"};
-    
+        private readonly string[] _allowedFileTypes = { "xlsx", "ods", "csv", "html", "pdf", "png" };
 
-    // Neither of these should ever be set to < 1;
+        // Neither of these should ever be set to < 1;
         // They help with formatting data placement.
         private const int DataColumnStart = 1;
         private const int DataRowStart = 2;
@@ -47,9 +46,8 @@ namespace ScheduleWhizRedux.Models
 
         public string FileType
         {
-            // If _fileType is null, set it to the default.
+            // Validate that the property returns and sets valid extensions.
             get => _fileType = _allowedFileTypes.Contains(_fileType) ? _fileType : DefaultFileType;
-            // When the property is set, if it is not of the types in the array, set to "xlsx"
             set => _fileType = _allowedFileTypes.Contains(value) ? value : DefaultFileType;
         }
 
