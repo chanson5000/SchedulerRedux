@@ -12,7 +12,7 @@ namespace ScheduleWhizRedux.UnitTests
         private string _fileLocation;
 
         [SetUp]
-        public void SetUp()
+        public void Init()
         {
             _scheduler = new Scheduler(new List<Employee>(), new List<AssignedShift>());
         }
