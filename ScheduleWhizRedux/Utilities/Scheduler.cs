@@ -18,12 +18,7 @@ namespace ScheduleWhizRedux.Utilities
         {
             Schedule schedule = new Schedule("Generated Schedule");
 
-            schedule.PopulateEmployeeNames(_employees);
-            schedule.PopulateDaysOfWeek();
             schedule.PopulateSchedule(_employees, _availableShifts);
-            
-            // Format our worksheet to look decent.
-            schedule.AutoFormat();
 
             // SaveToDisk can return file name.
             schedule.SaveToDisk();

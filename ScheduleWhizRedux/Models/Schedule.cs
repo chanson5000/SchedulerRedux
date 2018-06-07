@@ -2,24 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GemBox.Spreadsheet;
 
 namespace ScheduleWhizRedux.Models
 {
     public class Schedule
     {
-        private readonly string _spreadsheetName;
-        private readonly string _fileName;
-        private string _savedFileName;
-        private readonly ExcelWorksheet _worksheet;
         private readonly ExcelFile _excelFile;
         private readonly Random _random = new Random();
         private List<AssignedShift> _availableShifts;
-        // Some other possible options are:
-        // xlsx, ods, csv, html, pdf, png
-        private string _fileType = "xlsx";
+        private string _fileType;
+
         // Neither of these should ever be set to < 1;
         // They help with formatting data placement.
         private const int DataColumnStart = 1;
@@ -31,56 +24,97 @@ namespace ScheduleWhizRedux.Models
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             _excelFile = new ExcelFile();
 
-            _fileName = "Schedule";
+            RootFileName = "Schedule";
+            // Some other possible options are:
+            // xlsx, ods, csv, html, pdf, png
+            FileType = "xlsx";
 
-            _spreadsheetName = spreadsheetName;
+            SpreadsheetName = spreadsheetName;
 
-            _worksheet = _excelFile.Worksheets.Add(_spreadsheetName);
+            Worksheet = _excelFile.Worksheets.Add(SpreadsheetName);
         }
 
-        public string FileName => _fileName;
+        public string RootFileName { get; }
+
+        public string SavedFileLocation { get; private set; }
+
+        public ExcelWorksheet Worksheet { get; }
+
+        public string SpreadsheetName { get; set; }
+
+        public string FileType
+        {
+            get => _fileType;
+            // When the property is set, if it is not of the types in the array, set to "xlsx"
+            set => _fileType = new [] {"xlsx", "ods", "csv", "html", "pdf", "png"}.Contains(value) ? value : "xlsx";
+        }
+
+        public void PopulateSchedule(List<Employee> employees, List<AssignedShift> shifts)
+        {
+            PopulateDaysOfWeek();
+            PopulateEmployeeNames(employees);
+            PopulateShifts(employees, shifts);
+            AutoFormat();
+        }
+
+        public string SaveToDisk()
+        {
+            var userFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!File.Exists($"{userFolder}\\{RootFileName}.{FileType}"))
+            {
+                SavedFileLocation = $"{userFolder}\\{RootFileName}.{FileType}";
+                _excelFile.Save(SavedFileLocation);
+
+                return SavedFileLocation;
+            }
+
+            int saveCopy = 1;
+            while (File.Exists($"{userFolder}\\{RootFileName}-{saveCopy}.{FileType}"))
+            {
+                saveCopy++;
+            }
+            SavedFileLocation = $"{userFolder}\\{RootFileName}-{saveCopy}.{FileType}";
+            _excelFile.Save(SavedFileLocation);
+
+            return SavedFileLocation;
+        }
+
+        public void OpenSchedule()
+        {
+            System.Diagnostics.Process.Start(SavedFileLocation);
+        }
 
         // Populate the days of the week on the x axis.
-        public void PopulateDaysOfWeek()
+        private void PopulateDaysOfWeek()
         {
             int column = DataColumnStart;
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                _worksheet.Cells[DataRowStart - 1, column].Value = day.ToString();
+                Worksheet.Cells[DataRowStart - 1, column].Value = day.ToString();
                 column++;
             }
         }
 
         // Populate the employee names on the y axis.
-        public void PopulateEmployeeNames(List<Employee> employees)
+        private void PopulateEmployeeNames(IEnumerable<Employee> employees)
         {
             int row = DataRowStart;
 
             foreach (Employee employee in employees)
             {
-                _worksheet.Cells[row, DataColumnStart - 1].Value = employee.FullName;
+                Worksheet.Cells[row, DataColumnStart - 1].Value = employee.FullName;
                 row++;
             }
         }
 
-        public void AutoFormat()
+        private void PopulateShifts(IReadOnlyCollection<Employee> employees, List<AssignedShift> shifts)
         {
-            int columnCount = _worksheet.CalculateMaxUsedColumns();
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                _worksheet.Columns[i].AutoFit(1, _worksheet.Rows[1], _worksheet.Rows[_worksheet.Rows.Count - 1]);
-            }
-        }
-
-        public void PopulateSchedule(List<Employee> employees, List<AssignedShift> shifts)
-        {
+            _availableShifts = shifts;
             int maxAttempts = 5;
             int row = DataRowStart;
-            _availableShifts = shifts;
-            // While there are any available shifts.
 
+            // While there are any available shifts and we havent reached our attemps limit.
             while (_availableShifts.Any() && maxAttempts >= 0)
             {
                 int column = DataColumnStart;
@@ -93,7 +127,7 @@ namespace ScheduleWhizRedux.Models
                         foreach (Employee employee in employees)
                         {
                             // If the cell is empty, the employee has job titles, and there are any available shifts for the day.
-                            if (_worksheet.Cells[row, column].Value == null
+                            if (Worksheet.Cells[row, column].Value == null
                                 && employee.AvailableJobs.Any()
                                 && _availableShifts.Any(x => x.DayOfWeek.Equals(day)))
                             {
@@ -103,7 +137,7 @@ namespace ScheduleWhizRedux.Models
                                 // If we recieve a shift to plot.
                                 if (cellInfo != "")
                                 {
-                                    _worksheet.Cells[row, column].Value = cellInfo;
+                                    Worksheet.Cells[row, column].Value = cellInfo;
                                 }
                             }
 
@@ -119,8 +153,8 @@ namespace ScheduleWhizRedux.Models
                 // Too many attempts, find which shifts we were not able to plot.
                 else
                 {
-                   _worksheet.Cells[DataRowStart + employees.Count() + 1, DataColumnStart - 1]
-                        .SetValue("Unable to Schedule:");
+                    Worksheet.Cells[DataRowStart + employees.Count + 1, DataColumnStart - 1]
+                         .SetValue("Unable to Schedule:");
 
                     column = DataColumnStart;
 
@@ -132,7 +166,7 @@ namespace ScheduleWhizRedux.Models
                             // Plot vertically un-plotted shifts for that day.
                             foreach (var shift in shifts.Where(x => x.DayOfWeek.Equals(day)))
                             {
-                                _worksheet.Cells[DataRowStart + employees.Count() + 1, column]
+                                Worksheet.Cells[DataRowStart + employees.Count + 1, column]
                                     .SetValue($"{shift.ShiftName} - {shift.JobTitle}");
                                 row++;
                             }
@@ -143,6 +177,16 @@ namespace ScheduleWhizRedux.Models
 
                     maxAttempts--;
                 }
+            }
+        }
+
+        private void AutoFormat()
+        {
+            int columnCount = Worksheet.CalculateMaxUsedColumns();
+
+            for (var i = 0; i < columnCount; i++)
+            {
+                Worksheet.Columns[i].AutoFit(1, Worksheet.Rows[1], Worksheet.Rows[Worksheet.Rows.Count - 1]);
             }
         }
 
@@ -181,32 +225,6 @@ namespace ScheduleWhizRedux.Models
 
             // Return the shift information for plotting.
             return $"{shiftToPlot.ShiftName} - {shiftToPlot.JobTitle}";
-        }
-
-        public string SaveToDisk()
-        {
-            if (!File.Exists($"{_fileName}.{_fileType}"))
-            {
-                _savedFileName = $"{_fileName}.{_fileType}";
-                _excelFile.Save(_savedFileName);
-                
-                return _savedFileName;
-            }
-
-            int saveCopy = 1;
-            while (File.Exists($"{_fileName}-{saveCopy}.{_fileType}"))
-            {
-                saveCopy++;
-            }
-            _savedFileName = $"{_fileName}-{saveCopy}.{_fileType}";
-            _excelFile.Save(_savedFileName);
-
-            return _savedFileName;
-        }
-
-        public void OpenFile()
-        {
-            System.Diagnostics.Process.Start(_savedFileName);
         }
     }
 }
