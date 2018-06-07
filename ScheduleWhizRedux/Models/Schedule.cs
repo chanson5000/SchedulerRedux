@@ -153,7 +153,7 @@ namespace ScheduleWhizRedux.Models
                 // Too many attempts, find which shifts we were not able to plot.
                 else
                 {
-                    Worksheet.Cells[DataRowStart + employees.Count() + 1, DataColumnStart - 1]
+                    Worksheet.Cells[DataRowStart + employees.Count + 1, DataColumnStart - 1]
                          .SetValue("Unable to Schedule:");
 
                     column = DataColumnStart;
@@ -166,7 +166,7 @@ namespace ScheduleWhizRedux.Models
                             // Plot vertically un-plotted shifts for that day.
                             foreach (var shift in shifts.Where(x => x.DayOfWeek.Equals(day)))
                             {
-                                Worksheet.Cells[DataRowStart + employees.Count() + 1, column]
+                                Worksheet.Cells[DataRowStart + employees.Count + 1, column]
                                     .SetValue($"{shift.ShiftName} - {shift.JobTitle}");
                                 row++;
                             }
