@@ -97,7 +97,7 @@ namespace ScheduleWhizRedux.Models
         }
 
         // Populate the employee names on the y axis.
-        private void PopulateEmployeeNames(List<Employee> employees)
+        private void PopulateEmployeeNames(IEnumerable<Employee> employees)
         {
             int row = DataRowStart;
 
@@ -108,7 +108,7 @@ namespace ScheduleWhizRedux.Models
             }
         }
 
-        private void PopulateShifts(List<Employee> employees, List<AssignedShift> shifts)
+        private void PopulateShifts(IReadOnlyCollection<Employee> employees, List<AssignedShift> shifts)
         {
             _availableShifts = shifts;
             int maxAttempts = 5;
@@ -184,7 +184,7 @@ namespace ScheduleWhizRedux.Models
         {
             int columnCount = Worksheet.CalculateMaxUsedColumns();
 
-            for (int i = 0; i < columnCount; i++)
+            for (var i = 0; i < columnCount; i++)
             {
                 Worksheet.Columns[i].AutoFit(1, Worksheet.Rows[1], Worksheet.Rows[Worksheet.Rows.Count - 1]);
             }
