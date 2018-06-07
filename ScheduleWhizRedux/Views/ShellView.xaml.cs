@@ -41,7 +41,7 @@ namespace ScheduleWhizRedux.Views
 
             Schedule schedule = await Task.Run(() => scheduler.Generate());
 
-            schedule.OpenFile();
+            schedule.OpenSchedule();
             TxtGenerateSchedule.Text = "Generate Schedule";
             BtnGenerate.IsEnabled = true;
         }
