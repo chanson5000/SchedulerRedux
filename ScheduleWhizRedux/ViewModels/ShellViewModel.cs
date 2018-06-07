@@ -10,22 +10,22 @@ namespace ScheduleWhizRedux.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
-        private readonly IEmployeeRepository _employees;
-        private readonly IJobRepository _jobs;
-        private readonly IAssignedJobRepository _assignedJobs;
-        private readonly IAssignedShiftRepository _assignedShifts;
+        private readonly IEmployeeRepository _employees = new EmployeeRepository();
+        private readonly IJobRepository _jobs = new JobRepository();
+        private readonly IAssignedJobRepository _assignedJobs = new AssignedJobRepository();
+        private readonly IAssignedShiftRepository _assignedShifts = new AssignedShiftRepository();
         private BindableCollection<Employee> _allEmployees;
         private BindableCollection<Job> _allJobs;
         private Employee _selectedEmployee;
         private Job _selectedJob;
         private string _selectedAssignedJob;
         private string _selectedAvailableJob;
-        private readonly AddEmployeeViewModel _addEmployeeViewModel;
-        private readonly ModifyEmployeeViewModel _modifyEmployeeViewModel;
-        private readonly AddJobViewModel _addJobViewModel;
-        private readonly ModifyJobViewModel _modifyJobViewModel;
-        private readonly AddShiftViewModel _addShiftViewModel;
-        private readonly IWindowManager _windowManager;
+        private readonly AddEmployeeViewModel _addEmployeeViewModel = new AddEmployeeViewModel();
+        private readonly ModifyEmployeeViewModel _modifyEmployeeViewModel = new ModifyEmployeeViewModel();
+        private readonly AddJobViewModel _addJobViewModel = new AddJobViewModel();
+        private readonly ModifyJobViewModel _modifyJobViewModel = new ModifyJobViewModel();
+        private readonly AddShiftViewModel _addShiftViewModel = new AddShiftViewModel();
+        private readonly IWindowManager _windowManager = new WindowManager();
         private Job _sunSelectedJob;
         private Job _monSelectedJob;
         private Job _tueSelectedJob;
@@ -57,18 +57,9 @@ namespace ScheduleWhizRedux.ViewModels
 
         public ShellViewModel()
         {
-            _employees = new EmployeeRepository();
-            _jobs = new JobRepository();
-            _assignedJobs = new AssignedJobRepository();
-            _assignedShifts = new AssignedShiftRepository();
+            // TODO: Test converting other collections to BindableCollection for better ease of use.
             AllEmployees = new BindableCollection<Employee>(_employees.GetAllSorted());
             AllJobs = new BindableCollection<Job>(_jobs.GetAllSorted());
-            _windowManager = new WindowManager();
-            _addEmployeeViewModel = new AddEmployeeViewModel();
-            _modifyEmployeeViewModel = new ModifyEmployeeViewModel();
-            _addJobViewModel = new AddJobViewModel();
-            _modifyJobViewModel = new ModifyJobViewModel();
-            _addShiftViewModel = new AddShiftViewModel();
         }
 
         public BindableCollection<Employee> AllEmployees
