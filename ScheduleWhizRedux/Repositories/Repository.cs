@@ -54,7 +54,7 @@ namespace ScheduleWhizRedux.Repositories
             using (var sqlite = new SQLiteConnection(Repository.ConnectionString))
             {
                 sqlite.Open();
-                SQLiteCommand command = new SQLiteCommand(sql, sqlite);
+                var command = new SQLiteCommand(sql, sqlite);
                 command.ExecuteNonQuery();
             }
         }

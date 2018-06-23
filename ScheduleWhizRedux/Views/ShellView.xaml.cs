@@ -31,7 +31,7 @@ namespace ScheduleWhizRedux.Views
         private async void Generate_Button_Click(object sender, RoutedEventArgs e)
         {
             // New scheduler object takes a list of employees and available shifts to schedule.
-            Scheduler scheduler = new Scheduler(new EmployeeRepository().GetAllSorted(),
+            var scheduler = new Scheduler(new EmployeeRepository().GetAllSorted(),
                 new AssignedShiftRepository().GetAll().Where(x => x.NumAvailable > 0)
                     .ToList());
 

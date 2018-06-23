@@ -16,7 +16,7 @@ namespace ScheduleWhizRedux.Utilities
 
         public Schedule GenerateSchedule()
         {
-            Schedule schedule = new Schedule("Generated Schedule");
+            var schedule = new Schedule("Generated Schedule");
 
             schedule.PopulateSchedule(_employees, _availableShifts);
 
