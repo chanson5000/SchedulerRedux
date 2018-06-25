@@ -594,11 +594,9 @@ namespace ScheduleWhizRedux.ViewModels
         public void AddJob()
         {
             var result = _windowManager.ShowDialog(_addJobViewModel);
-            if (result == true)
-            {
-                AllJobs = new BindableCollection<Job>(_jobs.GetAllSorted());
-                NotifyOfPropertyChange(() => SelectedEmployee);
-            }
+            if (result != true) return;
+            AllJobs = new BindableCollection<Job>(_jobs.GetAllSorted());
+            NotifyOfPropertyChange(() => SelectedEmployee);
         }
 
         public void ModifyJob()
